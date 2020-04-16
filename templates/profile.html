@@ -1,0 +1,66 @@
+{% extends "template.html" %}
+{% block title %}
+<title>Profile Settings</title>
+{% endblock %}
+
+{% block header %}
+<ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('home') }}">Shop</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('about_page') }}">About</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% set count = 5 %}
+{% block content %}
+<div class="container">
+    <div class="card col-4 ml-auto mr-auto">
+        <article class="card-body mx-auto" style="max-width: 400px;">
+            <h4>User Details</h4>
+            <form>
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                    </div>
+                    <input name="" class="form-control" placeholder="Full Name" type="text" disabled value="{{ session['jwt_payload']['name'] }}">
+                </div> <!-- form-group// -->
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+                    </div>
+                    <input name="" class="form-control" placeholder="Email Address" type="email" disabled value="{{ session['jwt_payload']['email'] }}">
+                </div> <!-- form-group// -->
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
+                    </div>
+                    <input name="" class="form-control" placeholder="Phone number" type="text">
+                </div> <!-- form-group// -->
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-building"></i> </span>
+                    </div>
+                    <select class="form-control">
+                        <option selected=""> Select Apartment Name</option>
+                        {% for apt in apt %}
+                        <option>{{ apt.apt_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div> <!-- form-group end.// -->
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fas fa-door-open"></i> </span>
+                    </div>
+                    <input class="form-control" placeholder="Apartment Number" type="text">
+                </div> <!-- form-group// -->
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success btn-block"> Update Account </button>
+                </div> <!-- form-group// -->
+            </form>
+        </article>
+    </div> <!-- card.// -->
+</div>
+{% endblock %}

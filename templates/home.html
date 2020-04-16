@@ -1,0 +1,78 @@
+{% extends "template.html" %}
+{% block title %}
+<title>Home</title>
+{% endblock %}
+
+{% block header %}
+<ul class="navbar-nav mr-auto">
+    <li class="nav-item active">
+        <a class="nav-link text-success" href="{{ url_for('home') }}">Shop</span></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('about_page') }}">About</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% set count = 5 %}
+{% block content %}
+
+<div class="container">
+    <div class="dropdown">
+        <button class="btn btn-link text-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Categories
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="/">All</a>
+            {% for item in categories %}
+            <a class="dropdown-item" href="/category/{{ item.name }}">{{ item.name | capitalize }}</a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row mt-2">
+
+        {% for item in data %}
+        {% if item.onSale %}
+        <div class="col-lg-3 col-md-4 col-sm-6 col-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-2 text-center">
+                        <img src="{{ url_for('static', filename='images/veg/' + item.image + '.jpg') }}" alt="img"
+                            class="img-fluid">
+                    </div>
+                    <h4 class="card-title mb-3"><a href="javascript:void(0)"
+                            class="mr-2">{{ item.name | capitalize }}</a>
+                        {% for cart_item in session['cart'] %}
+                        {% if item.id == cart_item.id %}
+                        <i class="fas fa-check text-success" aria-hidden="true"></i>
+                        {% endif %}
+                        {% endfor %}
+                    </h4>
+
+                    <div class="mt-1 d-flex align-items-center">
+                        <div class="product-price">
+                            <strong>₹{{ item.price }}</strong>
+                            <div class="card-subtitle mt-0 mb-0">
+                                per {{ item.unit }}
+                            </div>
+                        </div>
+                        <div class="ml-auto">
+
+                            <form action="/cart/{{ item.id }}" method='post'>
+                                <button type="submit" href="javascript:void(0)" class="btn btn-success"><i
+                                        class="fas fa-cart-plus"></i> Add</button>
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

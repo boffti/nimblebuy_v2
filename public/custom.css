@@ -1,0 +1,106 @@
+/*! CSS Used from: https://preview.tabler.io/assets/css/dashboard.css */
+
+.card {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    position: relative;
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
+
+@media print {
+    .card {
+        box-shadow: none;
+        border: none;
+    }
+}
+
+.card-body {
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    margin: 0;
+    padding: 1.5rem 1.5rem;
+    position: relative;
+}
+
+.card-body> :last-child {
+    margin-bottom: 0;
+}
+
+@media print {
+    .card-body {
+        padding: 0;
+    }
+}
+
+.card-title {
+    font-size: 1.125rem;
+    line-height: 1.2;
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+}
+
+.card-title a {
+    color: inherit;
+}
+
+.card-subtitle {
+    color: #9aa0ac;
+    font-size: 0.875rem;
+    display: block;
+    margin: -.75rem 0 1rem;
+    line-height: 1.1;
+    font-weight: 400;
+}
+
+.product-price {
+    font-size: 1rem;
+}
+
+.product-price strong {
+    font-size: 1.5rem;
+}
+
+body {
+    background-color: #FAFAFA;
+}
+
+.nav-color {
+    background-color: #FAFAFA;
+}
+
+.img-2 {
+    position: relative;
+}
+
+@media (max-width: 767.98px) {
+    .img-2 {
+        height: 300px;
+        margin-bottom: 40px;
+    }
+}
+
+.img {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.social-link {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    border-radius: 50%;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+}
+
+.social-link:hover,
+.social-link:focus {
+    background: #ddd;
+    text-decoration: none;
+    color: #555;
+}

@@ -1,0 +1,21 @@
+{% extends "template.html" %}
+{% block title %}
+<title>About</title>
+{% endblock %}
+
+{% block header %}
+<ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('home') }}">Shop</a>
+    </li>
+    <li class="nav-item active">
+        <a class="nav-link text-success" href="{{ url_for('about_page') }}">About</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% set count = 5 %}
+{% set name = 'Aneesh' %}
+{% block content %}
+    
+{% endblock %}

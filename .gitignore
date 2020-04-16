@@ -1,0 +1,8 @@
+.env
+.pyc
+*.iml
+.directory
+.idea
+env/
+__pycache__/
+*.db

@@ -119,6 +119,10 @@ class Apartment(db.Model):
     name = db.Column(db.String)
     resident = db.relationship('User', backref='apartment')
 
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
     def format(self):
         return {
             'apt_name': self.name
@@ -210,6 +214,10 @@ class Category(db.Model):
     name = db.Column(db.String, nullable=False)
 
     vegetable = db.relationship('Vegetable', backref='category')
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
 
     def format(self):
         return({

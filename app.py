@@ -174,19 +174,27 @@ def update_profile():
 # GET Cart Page
 @app.route('/cart')
 def cart():
-    if 'profile' not in session:
-        return redirect(url_for('about_page'))
-    if 'cart' in session and len(session['cart']) > 0:
-        user = User.query.filter_by(email=session.get(constants.PROFILE_KEY)['email']).first()
-        apt_name = user.apartment.format()
-        subtotal = get_cart_total()
-        shipping = 10
-        subtotal += shipping
-        return render_template('cart.html', subtotal=subtotal,
-            shipping=shipping, user = user.format(), apt_name=apt_name)
-    else: 
-        flash('Please add something to the cart first!')
+    try:
+        if 'profile' not in session:
+            return redirect(url_for('about_page'))
+        if 'cart' in session and len(session['cart']) > 0:
+            user = User.query.filter_by(email=session.get(constants.PROFILE_KEY)['email']).first()
+            if user.apartment is None:
+                flash("Please update your personal details in Account Settings first. Thank You")
+                return redirect(request.referrer)
+            apt_name = user.apartment.format()
+            subtotal = get_cart_total()
+            shipping = 10
+            subtotal += shipping
+            return render_template('cart.html', subtotal=subtotal,
+                shipping=shipping, user = user.format(), apt_name=apt_name)
+        else: 
+            flash('Please add something to the cart first!')
+            return redirect(request.referrer)
+    except Exception as e:
+        print(f'Error ==> {e}')
         return redirect(request.referrer)
+
 
 # Add Item to Cart
 @app.route('/cart/<int:product_id>', methods=['POST'])
@@ -323,7 +331,17 @@ def get_session():
 # Init DB Data
 def import_db():
     import data
-    for item in data.data:
+    from models import Vegetable, Apartment, Category, Testimonial
+    for item in data.apartments:
+        apt = Apartment(id=item['id'], name=item['name'])
+        apt.insert()
+    for item in data.categories:
+        cat = Category(id=item['id'], name=item['name'])
+        cat.insert()
+    for item in data.testimonials:
+        test = Testimonial(id=item['id'], name=item['name'], testimonial=item['testimonial'])
+        test.insert()
+    for item in data.products:
         veg = Vegetable(category_id=item['category_id'], image=item['image'],
                         k_name=item['k_name'], name=item['name'],
                         onSale=bool(item['onSale']), price=item['price'],

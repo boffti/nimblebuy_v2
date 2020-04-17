@@ -1,4 +1,4 @@
-data = [
+products = [
     {
         "category_id": "1",
         "id": "1",
@@ -438,5 +438,69 @@ data = [
         "onSale": "1",
         "price": "70.0",
         "unit": "mtr"
+    }
+]
+
+apartments = [
+    {
+        "id": "1",
+        "name": "Sobha Forest View"
+    },
+    {
+        "id": "2",
+        "name": "Sobha Hill View"
+    },
+    {
+        "id": "3",
+        "name": "Total Environment"
+    },
+    {
+        "id": "4",
+        "name": "Sravanthi Oakridge"
+    },
+    {
+        "id": "5",
+        "name": "RR Nagar"
+    }
+]
+
+categories = [
+    {
+        "id": "1",
+        "name": "vegetable"
+    },
+    {
+        "id": "2",
+        "name": "fruit"
+    },
+    {
+        "id": "3",
+        "name": "herb"
+    },
+    {
+        "id": "4",
+        "name": "flower"
+    },
+    {
+        "id": "5",
+        "name": "other"
+    }
+]
+
+testimonials = [
+    {
+        "id": "1",
+        "name": "Rajan Mittal",
+        "testimonial": "Fresh vegetables and price seemed very genuine 👍👍👍 keep up the good work. Greens should be in 100gms ratio. 1/2 kg or 1kg is too much"
+    },
+    {
+        "id": "2",
+        "name": "Lakshmi Veeramani",
+        "testimonial": "Excellent quality of veggies. Thank you very much Kalpana!"
+    },
+    {
+        "id": "3",
+        "name": "Jyothi Pradeep",
+        "testimonial": "Yes all veggies are very fresh and greens also..thanks for the effort taken👏🏻👏🏻"
     }
 ]

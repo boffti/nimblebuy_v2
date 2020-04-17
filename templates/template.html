@@ -25,6 +25,14 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         {% block header %}{% endblock %}
 
+        {% if 'get:dashboard' in session['permissions'] %}
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('get_admin_page') }}">Admin Console</a>
+          </li>
+        </ul>
+        {% endif %}
+
         {% if session['profile'] %}
         <form class="form-inline my-2 my-lg-0">
           <ul class="navbar-nav">
@@ -58,9 +66,9 @@
   <div class="container">
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
       <strong>{{ message }}</strong>
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
-      </button>
+      </button> -->
     </div>
   </div>
   {% endfor %}
@@ -84,6 +92,13 @@
   </script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
     integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+  </script>
+  <script>
+    $(document).ready(function () {
+      setTimeout(function() {
+        $(".alert").alert('close');
+    }, 4000);
+    });
   </script>
 </body>
 

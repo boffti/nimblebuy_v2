@@ -59,17 +59,17 @@
                                 </th>
                                 <td class="border-0 align-middle text-center"><strong>₹{{ item.price }}</strong></td>
                                 <td class="border-0 align-middle text-center"><strong>
-                                        <form>
+                                        <form action="/cart/update/{{item.id}}">
                                             <div class="form-group d-flex justify-content-center">
-                                                <input style="width: 70px;" type="text" class="form-control align-middle" id="exampleInputEmail1"
-                                                    aria-describedby="emailHelp" value="{{ item.qty }}">
-                                            <button class="btn btn-link text-info align-middle">update</button>
+                                                <input name="qty" style="width: 70px;" type="text" class="form-control align-middle" id="qty"
+                                                    aria-describedby="qty" value="{{ item.qty }}">
+                                            <button type="submit" class="btn btn-link text-info align-middle">update</button>
 
                                             </div>
                                         </form>
                                     </strong></td>
-                                {% set subtotal = item.qty|float * item.price|float %}
-                                <td class="border-0 align-middle text-center"><strong>{{ subtotal }}</strong></td>
+                                {% set total = item.qty|float * item.price|float %}
+                                <td class="border-0 align-middle text-center"><strong>{{ total }}</strong></td>
                                 <td class="border-0 align-middle text-center">
                                     <form action="/cart/delete/{{ item.id }}" method="post">
                                         <button type="submit" class="btn btn-link text-dark"><i
@@ -114,14 +114,14 @@
                         have entered.</p>
                     <ul class="list-unstyled mb-4">
                         <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Order
-                                Subtotal </strong><strong>$390.00</strong></li>
+                                Subtotal </strong><strong>₹{{ subtotal }}</strong></li>
                         <li class="d-flex justify-content-between py-3 border-bottom"><strong
-                                class="text-muted">Shipping and handling</strong><strong>$10.00</strong></li>
+                                class="text-muted">Shipping and handling</strong><strong>₹10.00</strong></li>
                         <li class="d-flex justify-content-between py-3 border-bottom"><strong
-                                class="text-muted">Tax</strong><strong>$0.00</strong></li>
+                                class="text-muted">Tax</strong><strong>₹0.00</strong></li>
                         <li class="d-flex justify-content-between py-3 border-bottom"><strong
                                 class="text-muted">Total</strong>
-                            <h5 class="font-weight-bold">$400.00</h5>
+                            <h5 class="font-weight-bold">₹{{ subtotal }}</h5>
                         </li>
                     </ul><a href="#" class="btn btn-success rounded-pill py-2 btn-block">Procceed to checkout</a>
                 </div>

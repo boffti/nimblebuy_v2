@@ -1,0 +1,24 @@
+{% extends "template.html" %}
+{% block title %}
+<title>Profile Settings</title>
+{% endblock %}
+
+{% block header %}
+<ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('home') }}">Shop</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('about_page') }}">About</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% set count = 5 %}
+{% block content %}
+<div class="container">
+    <div class="card col-4 ml-auto mr-auto">
+        <h1>Welcome to the admin page</h1>
+    </div> <!-- card.// -->
+</div>
+{% endblock %}

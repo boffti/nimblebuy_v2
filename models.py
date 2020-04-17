@@ -200,10 +200,8 @@ class Testimonial(db.Model):
 
     def format(self):
         return({
-            self.id : {
             'name': self.name,
             'testimonial': self.testimonial,
-        }
         })   
 
 class Category(db.Model):

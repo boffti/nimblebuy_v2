@@ -4,6 +4,7 @@ from functools import wraps
 import json
 from os import environ as env
 from werkzeug.exceptions import HTTPException
+from flask_cors import CORS, cross_origin
 
 from dotenv import load_dotenv, find_dotenv
 from flask import Flask
@@ -17,6 +18,8 @@ from six.moves.urllib.parse import urlencode
 from models import db_init, Vegetable, User, Order, OrderDetails, Apartment, Category, Stock, Testimonial, Role, UserRoles
 from flask_migrate import Migrate
 from flask_babelex import Babel
+from auth import AuthError, requires_auth, store_permissions
+
 
 import data
 
@@ -38,7 +41,7 @@ app.secret_key = constants.SECRET_KEY
 app.debug = True
 db = db_init(app)
 babel = Babel(app)
-
+CORS(app)
 
 @app.errorhandler(Exception)
 def handle_auth_error(ex):
@@ -62,14 +65,14 @@ auth0 = oauth.register(
 )
 
 
-def requires_auth(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        if constants.PROFILE_KEY not in session:
-            return redirect('/login')
-        return f(*args, **kwargs)
+# def requires_auth(f):
+#     @wraps(f)
+#     def decorated(*args, **kwargs):
+#         if constants.PROFILE_KEY not in session:
+#             return redirect('/login')
+#         return f(*args, **kwargs)
 
-    return decorated
+#     return decorated
 
 def mergeDicts(dict1, dict2):
     if isinstance(dict1, list) and isinstance(dict2, list):
@@ -93,16 +96,17 @@ def get_category(category):
         return render_template('home.html', data=response, categories=categories)
 
     except:
-        return 'Error'
         flash('Error fetching category')
+        return redirect(request.referrer)
 
 @app.route('/about')
 def about_page():
-    return render_template('about.html')
+    testimonials = [item.format() for item in Testimonial.query.all()]
+    return render_template('about.html', testimonials=testimonials)
 
 @app.route('/cart')
 def cart():
-    if 'cart' in session:
+    if 'cart' in session and len(session['cart']) > 0:
         subtotal = 0
         for product in session['cart']:
             subtotal += float(product['price']) * float(product['qty'])
@@ -149,17 +153,42 @@ def delete_item_in_cart(product_id):
         arr = session['cart']
         arr[:] = [d for d in arr if d.get('id') != product_id]
         session['cart'] = arr
+        if len(session['cart']) == 0 :
+            flash('All items removed from cart')
+            return redirect(url_for('home'))
         return redirect(url_for('cart'))
 
     except Exception as e:
         return redirect(url_for('cart'))
         print(f'Error ==> {e}')
 
+# UPDATE Cart Item
+@app.route('/cart/update/<int:product_id>')
+def update_cart(product_id):
+    if 'cart' not in session and len(session['cart']) <= 0:
+        return redirect(url_for('cart'))
+    else:
+        qty = request.args.get('qty')
+        try:
+            session.modified = True
+            for item in session['cart']:
+                if item['id'] == product_id:
+                    item['qty'] = qty
+                    flash('Item was updated')
+                    return redirect(url_for('cart'))
+        except Exception as e:
+            flash('Something went wrong. Please try again.')
+            print(f'Error ==> {e}')
+            return redirect(url_for('cart'))
+
 @app.route('/callback')
 def callback_handling():
-    auth0.authorize_access_token()
+    token = auth0.authorize_access_token()
     resp = auth0.get('userinfo')
     userinfo = resp.json()
+
+    session['token'] = token.get('access_token')
+    session['permissions'] = store_permissions()
 
     session[constants.JWT_PAYLOAD] = userinfo
     session[constants.PROFILE_KEY] = {
@@ -181,20 +210,29 @@ def logout():
     params = {'returnTo': url_for('home', _external=True), 'client_id': AUTH0_CLIENT_ID}
     return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
 
+@app.route('/admin_page')
+@requires_auth('get:dashboard')
+def get_admin_page(jwt):
+    return render_template('admin.html')
+
 
 @app.route('/dashboard')
-@requires_auth
+# @cross_origin(headers=["Content-Type", "Authorization"])
+@requires_auth('get:dashboard')
 def dashboard():
     return render_template('dashboard.html',
                            userinfo=session[constants.PROFILE_KEY],
                            userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4))
 
+# For Debug
 @app.route('/session')
 def func_name():
     return jsonify({
         'jwt': session.get('jwt_payload'),
         'profile': session.get(constants.PROFILE_KEY),
-        'cart': session.get('cart')
+        'cart': session.get('cart'),
+        'token':session.get('token'),
+        'permissions': session.get('permissions')
     })
 
 def import_db():

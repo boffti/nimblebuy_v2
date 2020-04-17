@@ -1,6 +1,6 @@
 {% extends "template.html" %}
 {% block title %}
-<title>About</title>
+<title>Order Confirmation</title>
 {% endblock %}
 
 {% block header %}
@@ -8,14 +8,43 @@
     <li class="nav-item">
         <a class="nav-link" href="{{ url_for('home') }}">Shop</a>
     </li>
-    <li class="nav-item active">
-        <a class="nav-link text-success" href="{{ url_for('about_page') }}">About</a>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('about_page') }}">About</a>
     </li>
 </ul>
 {% endblock %}
-
-{% set count = 5 %}
-{% set name = 'Aneesh' %}
 {% block content %}
-    
+<div class="pb-5 mt-2">
+    <div class="container">
+
+        <div class="row py-5 p-4 bg-white rounded shadow-sm">
+            <div class="col-lg-12">
+                <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold"> #{{ session['order']['order_number'] }}  Order Placed</div>
+                <div class="p-4">
+                    <ul class="list-unstyled mb-4">
+                        <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Order
+                                Subtotal </strong><h5>₹{{ session['subtotal'] }}</h5></li>
+                    </ul>
+                </div>
+                <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Payment Modes
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="d-flex justify-content-center pt-3">
+                            <strong class="text-muted">PayTM</strong>
+                        </div>
+                        <img src="/public/images/paytm.jpg" alt="">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="d-flex justify-content-center pt-3">
+                            <strong class="text-muted">Google Pay</strong>
+                        </div>
+                        <img src="/public/images/gpay.jpg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 {% endblock %}

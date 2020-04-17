@@ -1,6 +1,6 @@
 {% extends "template.html" %}
 {% block title %}
-<title>About</title>
+<title>Shopping Cart</title>
 {% endblock %}
 
 {% block header %}
@@ -57,13 +57,16 @@
                                         </div>
                                     </div>
                                 </th>
-                                <td class="border-0 align-middle text-center"><strong>₹{{ item.price }}</strong></td>
+                                <td class="border-0 align-middle text-center"><strong>₹{{ item.price }}</strong> per
+                                    {{ item.unit }}</td>
                                 <td class="border-0 align-middle text-center"><strong>
                                         <form action="/cart/update/{{item.id}}">
                                             <div class="form-group d-flex justify-content-center">
-                                                <input name="qty" style="width: 70px;" type="text" class="form-control align-middle" id="qty"
-                                                    aria-describedby="qty" value="{{ item.qty }}">
-                                            <button type="submit" class="btn btn-link text-info align-middle">update</button>
+                                                <input name="qty" style="width: 70px;" type="text"
+                                                    class="form-control align-middle" id="qty" aria-describedby="qty"
+                                                    value="{{ item.qty }}">
+                                                <button type="submit"
+                                                    class="btn btn-link text-info align-middle">update</button>
 
                                             </div>
                                         </form>
@@ -73,13 +76,15 @@
                                 <td class="border-0 align-middle text-center">
                                     <form action="/cart/delete/{{ item.id }}" method="post">
                                         <button type="submit" class="btn btn-link text-dark"><i
-                                            class="fa fa-trash"></i></button>
+                                                class="fa fa-trash"></i></button>
                                     </form>
                                 </td>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
+                    <p class="nav-link font-italic mt-1 mb-0">* Please click on 'update' against each item quantity you
+                        change to update the cart</p>
                 </div>
                 <!-- End -->
             </div>
@@ -87,24 +92,20 @@
 
         <div class="row py-5 p-4 bg-white rounded shadow-sm">
             <div class="col-lg-6">
-                <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Coupon code</div>
+                <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">User Details</div>
                 <div class="p-4">
-                    <p class="font-italic mb-4">If you have a coupon code, please enter it in the box below</p>
-                    <div class="input-group mb-4 border rounded-pill p-2">
-                        <input type="text" placeholder="Apply coupon" aria-describedby="button-addon3"
-                            class="form-control border-0">
-                        <div class="input-group-append border-0">
-                            <button id="button-addon3" type="button" class="btn btn-success px-4 rounded-pill"><i
-                                    class="fa fa-gift mr-2"></i>Apply coupon</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Instructions for seller
-                </div>
-                <div class="p-4">
-                    <p class="font-italic mb-4">If you have some information for the seller you can leave them in
-                        the box below</p>
-                    <textarea name="" cols="30" rows="2" class="form-control"></textarea>
+                    <ul class="list-unstyled mb-4">
+                        <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Name:
+                            </strong>{{ user.fname }}</li>
+                        <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Phone:
+                            </strong>{{ user.phone }}</li>
+                        <li class="d-flex justify-content-between py-3 border-bottom"><strong
+                                class="text-muted">Apartment Name: </strong>{{ apt_name.apt_name }}</li>
+                        <li class="d-flex justify-content-between py-3 border-bottom"><strong
+                                class="text-muted">Apartment Number: </strong>{{  user.apt }}</li>
+                    </ul>
+                    <p class="nav-link font-italic mt-1 mb-0">* Please update any missing information in your Account
+                        settings before placing the order.</p>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -114,16 +115,21 @@
                         have entered.</p>
                     <ul class="list-unstyled mb-4">
                         <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Order
-                                Subtotal </strong><strong>₹{{ subtotal }}</strong></li>
+                                Subtotal </strong><strong>₹{{ subtotal - shipping  }}</strong></li>
                         <li class="d-flex justify-content-between py-3 border-bottom"><strong
-                                class="text-muted">Shipping and handling</strong><strong>₹10.00</strong></li>
+                                class="text-muted">Shipping and handling</strong><strong>₹{{ shipping }}</strong></li>
                         <li class="d-flex justify-content-between py-3 border-bottom"><strong
-                                class="text-muted">Tax</strong><strong>₹0.00</strong></li>
+                                class="text-muted">Tax</strong><strong>₹0.0</strong></li>
                         <li class="d-flex justify-content-between py-3 border-bottom"><strong
                                 class="text-muted">Total</strong>
                             <h5 class="font-weight-bold">₹{{ subtotal }}</h5>
                         </li>
-                    </ul><a href="#" class="btn btn-success rounded-pill py-2 btn-block">Procceed to checkout</a>
+                    </ul>
+                    <form action="{{ url_for('create_order') }}" method="post">
+                        <button type="submit" class="btn btn-success rounded-pill py-2 btn-block">Place Order</button>
+                    </form>
+                    <p class="nav-link font-italic mt-1 mb-0">* Clicking the above button will place your order and
+                        display QR Code to make the payment using PayTM or GPay</p>
                 </div>
             </div>
         </div>

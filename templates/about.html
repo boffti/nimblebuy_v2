@@ -1,6 +1,6 @@
 {% extends "template.html" %}
 {% block title %}
-<title>About</title>
+<title>NimbleBuy</title>
 {% endblock %}
 
 {% block header %}
@@ -18,11 +18,12 @@
 {% block content %}
 <div class="nav-color">
     <div class="container py-5">
-        <div class="row h-99 align-items-center py-5">
+        <div class="row h-99 align-items-center py-5 mt-3">
             <div class="col-lg-6">
-                <h1 class="display-4">Welcome to NimbleBuy</h1>
-                <p class="lead text-muted mb-0">This website is a humble effort to connect different regions in
+                <h1 class="display-4 text-success">Welcome to NimbleBuy</h1>
+                <p class="lead text-muted mb-0">This is a humble effort to connect different regions in
                     Bangalore to Vegetable vendors during the lockdown.</p>
+                    <a class="btn btn-success btn-lg mt-3" href="{{ url_for('home') }}">Start Shopping</a>
             </div>
             <div class="col-lg-6 d-none d-lg-block"><img src="/public/images/about_1.png" alt="" class="img-fluid">
             </div>
@@ -37,6 +38,7 @@
                 <h2 class="font-weight-light">How it works.</h2>
                 <p class="font-italic text-muted mb-4">Request us to add your society/locality. Thereafter, you can
                     browse the products and place an order.</p>
+                <button class="btn btn-success" data-toggle="modal" data-target="#enquirymodal">Send Enquiry</button>
             </div>
             <div class="col-lg-5 px-5 mx-auto order-1 order-lg-2"><img src="/public/images/about_2.png" alt=""
                     class="img-fluid mb-4 mb-lg-0"></div>
@@ -86,7 +88,8 @@
                                     <div class="media-body ml-3">
                                         <blockquote class="blockquote border-0 p-0">
                                             <p class="font-italic lead"> <i
-                                                    class="fa fa-quote-left mr-3 text-success"></i>{{ item.testimonial }}</p>
+                                                    class="fa fa-quote-left mr-3 text-success"></i>{{ item.testimonial }}
+                                            </p>
                                             <footer class="blockquote-footer">{{ item.name }}</footer>
                                         </blockquote>
                                     </div>
@@ -98,7 +101,8 @@
                                     <div class="media-body ml-3">
                                         <blockquote class="blockquote border-0 p-0">
                                             <p class="font-italic lead"> <i
-                                                    class="fa fa-quote-left mr-3 text-success"></i>{{ item.testimonial }}</p>
+                                                    class="fa fa-quote-left mr-3 text-success"></i>{{ item.testimonial }}
+                                            </p>
                                             <footer class="blockquote-footer">{{ item.name }}</footer>
                                         </blockquote>
                                     </div>
@@ -130,9 +134,9 @@
 <div class="bg-light pt-0 pb-0">
     <div class="container py-5">
         <div class="row mb-4">
-            <div class="col-lg-5">
+            <div class="col-lg-8">
                 <h2 class="display-4 font-weight-light">Meet the Melkots</h2>
-                <p class="font-italic text-muted">Fun loving, enthusiatic and always ready to help out</p>
+                <p class="font-italic text-muted">Fun loving, enthusiatic and always ready to help out. We started NimbleBuy during these unprecedented times to support local vendors and help our peers procure fresh produce.</p>
             </div>
         </div>
 
@@ -141,15 +145,15 @@
             <div class="col-xl-3 col-sm-6 col-6 mb-5">
                 <div class="bg-white rounded shadow-sm py-5 px-4"><img src="/public/images/kalpana.jpg" alt=""
                         width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
-                    <h5 class="mb-0">Kalpana Nagaraj</h5><span class="small text-uppercase text-muted">CEO -
-                        Founder</span>
+                    <h5 class="mb-0">Kalpana Nagaraj</h5>
                     <ul class="social mb-0 list-inline mt-3">
                         <li class="list-inline-item"><a href="#" target="_blank" class="social-link"><i
                                     class="fab fa-facebook-f"></i></a></li>
                         <li class="list-inline-item"><a href="#" target="_blank" class="social-link"><i
                                     class="fab fa-instagram"></i></a>
                         </li>
-                        <li class="list-inline-item"><a href="#" target="_blank" class="social-link"><i class="fab fa-linkedin"></i></a>
+                        <li class="list-inline-item"><a href="#" target="_blank" class="social-link"><i
+                                    class="fab fa-linkedin"></i></a>
                         </li>
                     </ul>
                 </div>
@@ -160,15 +164,15 @@
             <div class="col-xl-3 col-sm-6 col-6 mb-5">
                 <div class="bg-white rounded shadow-sm py-5 px-4"><img src="/public/images/nagaraj.jpg" alt=""
                         width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
-                    <h5 class="mb-0">Nagaraj Melkote</h5><span class="small text-uppercase text-muted">Board
-                        Member</span>
+                    <h5 class="mb-0">Nagaraj Melkote</h5>
                     <ul class="social mb-0 list-inline mt-3">
                         <li class="list-inline-item"><a href="#" target="_blank" class="social-link"><i
                                     class="fab fa-facebook-f"></i></a></li>
                         <li class="list-inline-item"><a href="#" target="_blank" class="social-link"><i
                                     class="fab fa-instagram"></i></a>
                         </li>
-                        <li class="list-inline-item"><a href="#" target="_blank" class="social-link"><i class="fab fa-linkedin"></i></a>
+                        <li class="list-inline-item"><a href="#" target="_blank" class="social-link"><i
+                                    class="fab fa-linkedin"></i></a>
                         </li>
                     </ul>
                 </div>
@@ -179,14 +183,15 @@
             <div class="col-xl-3 col-sm-6 col-6 mb-5">
                 <div class="bg-white rounded shadow-sm py-5 px-4"><img src="/public/images/aneesh.jpg" alt=""
                         width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
-                    <h5 class="mb-0">Aneesh Melkot</h5><span class="small text-uppercase text-muted">CTO</span>
+                    <h5 class="mb-0">Aneesh Melkot</h5>
                     <ul class="social mb-0 list-inline mt-3">
-                        <li class="list-inline-item"><a href="https://www.facebook.com/aneeshmelkot" target="_blank" class="social-link"><i
-                                    class="fab fa-facebook-f"></i></a></li>
-                        <li class="list-inline-item"><a href="https://www.instagram.com/aneeshmelkot/" target="_blank" class="social-link"><i
-                                    class="fab fa-instagram"></i></a>
+                        <li class="list-inline-item"><a href="https://www.facebook.com/aneeshmelkot" target="_blank"
+                                class="social-link"><i class="fab fa-facebook-f"></i></a></li>
+                        <li class="list-inline-item"><a href="https://www.instagram.com/aneeshmelkot/" target="_blank"
+                                class="social-link"><i class="fab fa-instagram"></i></a>
                         </li>
-                        <li class="list-inline-item"><a href="https://www.linkedin.com/in/aneeshmelkot/" target="_blank" class="social-link"><i class="fab fa-linkedin"></i></a>
+                        <li class="list-inline-item"><a href="https://www.linkedin.com/in/aneeshmelkot/" target="_blank"
+                                class="social-link"><i class="fab fa-linkedin"></i></a>
                         </li>
                     </ul>
                 </div>
@@ -197,15 +202,15 @@
             <div class="col-xl-3 col-sm-6 col-6 mb-5">
                 <div class="bg-white rounded shadow-sm py-5 px-4"><img src="/public/images/aakankshaa.jpg" alt=""
                         width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
-                    <h5 class="mb-0">Aakankshaa Melkot</h5><span class="small text-uppercase text-muted">Board
-                        Member</span>
+                    <h5 class="mb-0">Aakankshaa Melkot</h5>
                     <ul class="social mb-0 list-inline mt-3">
                         <li class="list-inline-item"><a href="#" target="_blank" class="social-link"><i
                                     class="fab fa-facebook-f"></i></a></li>
                         <li class="list-inline-item"><a href="#" target="_blank" class="social-link"><i
                                     class="fab fa-instagram"></i></a>
                         </li>
-                        <li class="list-inline-item"><a href="#" target="_blank" class="social-link"><i class="fab fa-linkedin"></i></a>
+                        <li class="list-inline-item"><a href="#" target="_blank" class="social-link"><i
+                                    class="fab fa-linkedin"></i></a>
                         </li>
                     </ul>
                 </div>
@@ -215,5 +220,52 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="enquirymodal" tabindex="-1" role="dialog" aria-labelledby="enquirymodallabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Enquiry Form</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/enquire" method="post">
+                <div class="modal-body">
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                        </div>
+                        <input name="name" class="form-control" placeholder="Full Name" type="text">
+                    </div> <!-- form-group// -->
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
+                        </div>
+                        <input name="phone" class="form-control" placeholder="Phone number" type="text">
+                    </div> <!-- form-group// -->
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-building"></i> </span>
+                        </div>
+                        <input name="locality" class="form-control" placeholder="Apartment Name or Locality" type="text">
+
+                    </div> <!-- form-group end.// -->
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Send Enquiry</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer class="footer text-muted">
+    <div class="container text-center">
+        <p>Made with <i class="fas fa-heart text-danger"></i> by Aneesh Melkot</p>
+    </div>
+</footer>
 
 {% endblock %}

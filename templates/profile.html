@@ -20,33 +20,34 @@
     <div class="card col-4 ml-auto mr-auto">
         <article class="card-body mx-auto" style="max-width: 400px;">
             <h4>User Details</h4>
-            <form>
+            <form action="/profile/update" method="post">
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                     </div>
-                    <input name="" class="form-control" placeholder="Full Name" type="text" disabled value="{{ session['jwt_payload']['name'] }}">
+                    <input name="name" class="form-control" placeholder="Full Name" type="text" value="{{ user.fname }}">
                 </div> <!-- form-group// -->
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
                     </div>
-                    <input name="" class="form-control" placeholder="Email Address" type="email" disabled value="{{ session['jwt_payload']['email'] }}">
+                    <input name="email" class="form-control" placeholder="Email Address" type="email" disabled
+                        value="{{ user.email }}">
                 </div> <!-- form-group// -->
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
                     </div>
-                    <input name="" class="form-control" placeholder="Phone number" type="text">
+                    <input name="phone" class="form-control" placeholder="Phone number" type="text" value="{{ user.phone }}">
                 </div> <!-- form-group// -->
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-building"></i> </span>
                     </div>
-                    <select class="form-control">
+                    <select name="apt_name" class="form-control">
                         <option selected=""> Select Apartment Name</option>
                         {% for apt in apt %}
-                        <option>{{ apt.apt_name }}</option>
+                        <option value="{{ apt.apt_name }}">{{ apt.apt_name }}</option>
                         {% endfor %}
                     </select>
                 </div> <!-- form-group end.// -->
@@ -54,7 +55,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fas fa-door-open"></i> </span>
                     </div>
-                    <input class="form-control" placeholder="Apartment Number" type="text">
+                    <input name="apt_number" class="form-control" placeholder="Apartment Number" type="text" value="{{ user.apt }}">
                 </div> <!-- form-group// -->
                 <div class="form-group">
                     <button type="submit" class="btn btn-success btn-block"> Update Account </button>

@@ -215,3 +215,21 @@ class Category(db.Model):
         return({
             'name': self.name,
         })   
+
+class Enquiry(db.Model):
+    __tablename__ = 'enquiries'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    phone = db.Column(db.String, nullable=False)
+    locality = db.Column(db.String, nullable=False)
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def format(self):
+        return({
+            'name': self.name,
+            'phone': self.phone,
+            'locality': self.locality
+        })   

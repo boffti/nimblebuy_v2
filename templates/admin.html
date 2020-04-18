@@ -72,11 +72,50 @@
 
 
         </div>
+        <div class="col-lg-6 p-5 bg-white rounded shadow-sm mb-5">
+            <div class="bg-light rounded-pill mb-4 px-4 py-3 text-uppercase font-weight-bold">Enquiries</div>
+
+            <table class="table table-bordered" style="border-collapse:collapse;">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Locality</th>
+                        <th>Enquiry</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in enquiry %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.phone }}</td>
+                        <td>{{ item.locality }}</td>
+                        <td>{{ item.enquiry }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+
+        </div>
     </div>
 
     <div class="row">
         <div class="col-lg-12 p-5 bg-white rounded shadow-sm mb-5">
-            <div class="bg-light rounded-pill mb-4 px-4 py-3 text-uppercase font-weight-bold">Orders</div>
+            <div class="bg-light rounded-pill mb-4 px-4 py-3 text-uppercase font-weight-bold d-flex align-items-center">Orders
+                <div class="dropdown">
+                    <button class="btn btn-link text-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Apt
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="/admin_page">All</a>
+                        {% for item in apt %}
+                        <a class="dropdown-item" href="/admin_page/filter/{{ item.id }}">{{ item.apt_name | capitalize }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
             <table class="table table-bordered" style="border-collapse:collapse;">
                 <thead class="sticky-top">
                     <tr>

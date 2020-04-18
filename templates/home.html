@@ -75,4 +75,56 @@
     </div>
 </div>
 
+<footer class="footer text-muted">
+    <div class="container text-center">
+        <p>Need something not listed on this page? Enquire <a href="#" class="text-success" data-toggle="modal" data-target="#enquirymodal">here</a> and we'll do our best to source it for you.</p>
+    </div>
+</footer>
+
+<!-- Modal -->
+<div class="modal fade" id="enquirymodal" tabindex="-1" role="dialog" aria-labelledby="enquirymodallabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Enquiry Form</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/enquire" method="post">
+                <div class="modal-body">
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                        </div>
+                        <input name="name" class="form-control" placeholder="Full Name" type="text">
+                    </div> <!-- form-group// -->
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
+                        </div>
+                        <input name="phone" class="form-control" placeholder="Phone number" type="text">
+                    </div> <!-- form-group// -->
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-building"></i> </span>
+                        </div>
+                        <input name="locality" class="form-control" placeholder="Apartment Name or Locality" type="text">
+                    </div> <!-- form-group end.// -->
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fas fa-align-justify"></i> </span>
+                        </div>
+                        <textarea name="enquiry" class="form-control" placeholder="Tell us your requirements" rows="2"></textarea>
+                    </div> <!-- form-group end.// -->
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Send Enquiry</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

@@ -302,7 +302,10 @@ def order_confirm():
 def submit_enquiry():
     data = request.form.to_dict()
     try:
-        enquiry = Enquiry(name=data['name'], phone=data['phone'], locality=data['locality'])
+        if 'enquiry' not in data:
+            enquiry = Enquiry(name=data['name'], phone=data['phone'], locality=data['locality'])
+        else:
+            enquiry = Enquiry(name=data['name'], phone=data['phone'], locality=data['locality'], enquiry=data['enquiry'])
         enquiry.insert()
         flash('Your details were submitted. We will get back to you very shortly.')
         return redirect(request.referrer)
@@ -315,12 +318,27 @@ def submit_enquiry():
 @app.route('/admin_page')
 @requires_auth('get:admin_dashboard')
 def get_admin_page(jwt):
-    return render_template('admin.html', orders=get_orders(), stock=get_stock())
+    return render_template('admin.html', orders=get_orders(), stock=get_stock(), apt=get_apt(), enquiry=get_enquiries())
 
-def get_orders():
+@app.route('/admin_page/filter/<int:apt_id>')
+@requires_auth('get:admin_dashboard')
+def get_admin_page_with_filter(jwt, apt_id):
+    return render_template('admin.html', orders=get_orders(apt_id), stock=get_stock(), apt=get_apt(), enquiry=get_enquiries())
+
+def get_enquiries():
+    return [item.format() for item in Enquiry.query.all()]
+
+def get_apt():
+    return [item.format() for item in Apartment.query.all()]
+
+def get_orders(loc_id=None):
     response = []
     try:
-        users = User.query.all()
+        users = None
+        if loc_id:
+            users = User.query.filter_by(apt_id=loc_id).all()
+        else:
+            users = User.query.all()
         for user in users:
             orders = user.orders
             if len(orders) > 0:

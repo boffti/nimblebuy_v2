@@ -149,6 +149,7 @@ class Order(db.Model):
     order_number = db.Column(db.String)
     order_date = db.Column(db.String)
     order_total = db.Column(db.String)
+    customer_loc = db.Column(db.String)
 
     order_details = db.relationship('OrderDetails', backref='order')
 
@@ -161,7 +162,8 @@ class Order(db.Model):
             'id': self.id,
             'customer_id': self.customer_id,
             'order_number': self.order_number,
-            'order_date': self.order_date
+            'order_date': self.order_date,
+            'customer_loc': self.customer_loc
         }
 
     def __repr__(self):
@@ -231,6 +233,7 @@ class Enquiry(db.Model):
     name = db.Column(db.String, nullable=False)
     phone = db.Column(db.String, nullable=False)
     locality = db.Column(db.String, nullable=False)
+    enquiry = db.Column(db.String)
 
     def insert(self):
         db.session.add(self)
@@ -240,5 +243,6 @@ class Enquiry(db.Model):
         return({
             'name': self.name,
             'phone': self.phone,
-            'locality': self.locality
+            'locality': self.locality,
+            'enquiry': self.enquiry
         })   

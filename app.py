@@ -181,7 +181,7 @@ def cart():
             user = User.query.filter_by(email=session.get(constants.PROFILE_KEY)['email']).first()
             if user.apartment is None:
                 flash("Please update your personal details in Account Settings first. Thank You")
-                return redirect(request.referrer)
+                return redirect(url_for('user_profile'))
             apt_name = user.apartment.format()
             subtotal = get_cart_total()
             shipping = 10
@@ -315,7 +315,43 @@ def submit_enquiry():
 @app.route('/admin_page')
 @requires_auth('get:admin_dashboard')
 def get_admin_page(jwt):
-    return render_template('admin.html')
+    return render_template('admin.html', orders=get_orders(), stock=get_stock())
+
+def get_orders():
+    response = []
+    try:
+        users = User.query.all()
+        for user in users:
+            orders = user.orders
+            if len(orders) > 0:
+                order_details = [order.order_details for order in orders]
+                items_ordered = [{**(detail.format()), **(Vegetable.query.get(detail.product_id).format())} for detail in order_details[0]]
+                response.append({
+                    'customer': {**(user.format()), **(user.apartment.format())},
+                    'order': [order.format() for order in user.orders],
+                    'order_details': items_ordered,
+                    'order_total': items_ordered[0].get('total', 0)
+                })
+            else: continue
+        return response
+
+    except Exception as e:
+        print(f'error ==> {e}')
+        return None
+
+def get_stock():
+    try:
+        inventory = [{**(item.format()), **({ 'stock' : 0 })} for item in Vegetable.query.all()]
+        order_details = OrderDetails.query.all()
+        items_ordered = [detail.format() for detail in order_details]
+        for product in inventory:
+            for item in items_ordered:
+                if product['id'] == item['product_id']:
+                    product['stock'] = product.get('stock') + float(item['qty'])
+        return inventory
+    except Exception as e:
+        print(f'Error ==> {e}')
+        return 'Nothing'
 
 # Debug Route
 @app.route('/session')

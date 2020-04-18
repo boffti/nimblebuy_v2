@@ -38,7 +38,11 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
                     </div>
+                    {% if user.phone == 'None' %}
+                    <input name="phone" class="form-control" placeholder="Phone number" type="text" value="">
+                    {% else %}
                     <input name="phone" class="form-control" placeholder="Phone number" type="text" value="{{ user.phone }}">
+                    {% endif %}
                 </div> <!-- form-group// -->
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
@@ -47,7 +51,11 @@
                     <select name="apt_name" class="form-control">
                         <option selected=""> Select Apartment Name</option>
                         {% for apt in apt %}
+                        {% if user.apt_id == apt.id %}
+                        <option value="{{ apt.apt_name }}" selected>{{ apt.apt_name }}</option>
+                        {% else %}
                         <option value="{{ apt.apt_name }}">{{ apt.apt_name }}</option>
+                        {% endif %}
                         {% endfor %}
                     </select>
                 </div> <!-- form-group end.// -->
@@ -55,7 +63,11 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fas fa-door-open"></i> </span>
                     </div>
+                    {% if user.apt == 'None' %}
+                    <input name="apt_number" class="form-control" placeholder="Apartment Number" type="text" value="">
+                    {% else %}
                     <input name="apt_number" class="form-control" placeholder="Apartment Number" type="text" value="{{ user.apt }}">
+                    {% endif %}
                 </div> <!-- form-group// -->
                 <div class="form-group">
                     <button type="submit" class="btn btn-success btn-block"> Update Account </button>

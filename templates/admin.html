@@ -16,9 +16,114 @@
 
 {% set count = 5 %}
 {% block content %}
+<style>
+    .table tr {
+        cursor: pointer;
+    }
+
+    .table {
+        background-color: #fff !important;
+    }
+
+    .hedding h1 {
+        color: #fff;
+        font-size: 25px;
+    }
+
+    .main-section {
+        margin-top: 5px;
+    }
+
+    .hiddenRow {
+        padding: 0 4px !important;
+        background-color: #eeeeee;
+        font-size: 13px;
+    }
+
+    .accordian-body span {
+        color: #a2a2a2 !important;
+    }
+</style>
 <div class="container">
-    <div class="card col-4 ml-auto mr-auto">
-        <h1>Welcome to the admin page</h1>
-    </div> <!-- card.// -->
+    <div class="row">
+        <div class="col-lg-6 p-5 bg-white rounded shadow-sm mb-5">
+            <div class="bg-light rounded-pill mb-4 px-4 py-3 text-uppercase font-weight-bold">Purchase List</div>
+
+            <table class="table table-bordered" style="border-collapse:collapse;">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>ಹೆಸರು</th>
+                        <th>Stock</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in stock %}
+                    {% if item.stock > 0 %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.k_name }}</td>
+                        <td>{{ item.stock }} {{ item.unit }}</td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12 p-5 bg-white rounded shadow-sm mb-5">
+            <div class="bg-light rounded-pill mb-4 px-4 py-3 text-uppercase font-weight-bold">Orders</div>
+            <table class="table table-bordered" style="border-collapse:collapse;">
+                <thead class="sticky-top">
+                    <tr>
+                        <th>No.</th>
+                        <th>Name</th>
+                        <th>Apt Name</th>
+                        <th>Apt Num</th>
+                        <th>Phone</th>
+                        <th>Order total</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for user in orders %}
+                    <tr colspan="6" data-toggle="collapse" data-target="#demo1" class="accordion-toggle">
+                        <td>{{loop.index}}</td>
+                        <td>{{user.customer.fname}}</td>
+                        <td>{{user.customer.apt_name}}</td>
+                        <td>{{user.customer.apt}}</td>
+                        <td>{{user.customer.phone}}</td>
+                        <td>₹{{ user.order_total }}</td>
+                    </tr>
+                    <tr class="p">
+                        <td colspan="6" class="hiddenRow">
+                            <div class="accordian-body  p-3" id="demo1">
+                                {% if user.order %}
+                                <div class="row">
+                                    {% for item in user.order_details %}
+                                    {% set subtotal = item.qty|float * item.price|float %}
+                                    <div class="col-sm-2">
+                                        <p><span>{{ item.qty }} {{ item.unit }}</span> : {{ item.name }} :
+                                            {{ item.k_name }}<span>₹{{ subtotal }}</span></p>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                <p><span>Nothing Ordered</span></p>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 {% endblock %}

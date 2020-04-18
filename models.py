@@ -125,6 +125,7 @@ class Apartment(db.Model):
 
     def format(self):
         return {
+            'id': self.id,
             'apt_name': self.name
         }
 

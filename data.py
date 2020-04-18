@@ -160,7 +160,7 @@ products = [
         "unit": "kg"
     },
     {
-        "category_id": "1",
+        "category_id": "5",
         "id": "17",
         "image": "coconut",
         "k_name": "ತೆಂಗಿನ ಕಾಯಿ",
@@ -330,7 +330,7 @@ products = [
         "unit": "100 gms"
     },
     {
-        "category_id": "1",
+        "category_id": "5",
         "id": "34",
         "image": "banana_stem",
         "k_name": "ಬಾಳೆ ಕಾಂಡ",
@@ -390,7 +390,7 @@ products = [
         "unit": "kg"
     },
     {
-        "category_id": "1",
+        "category_id": "5",
         "id": "40",
         "image": "mushroom",
         "k_name": "ಅಣಬೆ",

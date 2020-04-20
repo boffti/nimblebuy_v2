@@ -5,6 +5,7 @@ from flask_user import UserMixin
 database_path = 'sqlite:///nimblebuy.db'
 
 db = SQLAlchemy()
+# Init for main app
 def db_init(app):
     app.config.from_object('config')
     db.app = app
@@ -12,11 +13,20 @@ def db_init(app):
     migrate = Migrate(app, db)
     return db
 
-def setup_test_db(app, database_path=database_path):
+# Init for Test Suite
+def setup_db(app, database_path):
+    '''binds a flask application and a SQLAlchemy service'''
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
+    db.create_all()
+
+def db_drop_and_create_all():
+    '''drops the database tables and starts fresh
+    can be used to initialize a clean database
+    '''
+    db.drop_all()
     db.create_all()
 
 class Vegetable(db.Model):

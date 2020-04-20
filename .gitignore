@@ -9,3 +9,4 @@ __pycache__/
 *.db-journal
 nimblebuy_test
 .vscode/
+.pytest_cache/

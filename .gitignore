@@ -6,3 +6,6 @@
 env/
 __pycache__/
 *.db
+*.db-journal
+nimblebuy_test
+.vscode/

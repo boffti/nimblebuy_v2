@@ -41,6 +41,12 @@ babel = Babel(app)
 CORS(app)
 sid = ShortId()
 
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PATCH,POST,DELETE,OPTIONS')
+    return response
+
 @app.errorhandler(Exception)
 def handle_auth_error(ex):
     response = jsonify(message=str(ex))
@@ -179,7 +185,7 @@ def cart():
             return redirect(url_for('about_page'))
         if 'cart' in session and len(session['cart']) > 0:
             user = User.query.filter_by(email=session.get(constants.PROFILE_KEY)['email']).first()
-            if user.apartment is None:
+            if user.apartment is None or user.apt is None or user.phone is None:
                 flash("Please update your personal details in Account Settings first. Thank You")
                 return redirect(url_for('user_profile'))
             apt_name = user.apartment.format()
@@ -357,6 +363,15 @@ def get_orders(loc_id=None):
         print(f'error ==> {e}')
         return None
 
+def get_orders_2(loc_id=None):
+    response = []
+    orders = Order.query.all()
+    for order in orders:
+        user = order.customer
+        order_details = order.order_details
+        items_ordered = [{**(detail.format()), **(Vegetable.query.get(detail.product_id).format())} for detail in order_details]
+
+
 def get_stock():
     try:
         inventory = [{**(item.format()), **({ 'stock' : 0 })} for item in Vegetable.query.all()]
@@ -401,6 +416,34 @@ def import_db():
                         onSale=bool(item['onSale']), price=item['price'],
                         unit=item['unit'])
         veg.insert()
+
+# ----------------------------------------------------------------------- #
+# Test Routes
+# ------------------------------------------------------------------------#
+
+@app.errorhandler(400)
+def bad_request(error):
+    return jsonify({
+        "success": False,
+        "error": 400,
+        "message": "bad request"
+    }), 400
+
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({
+        "success": False,
+        "error": 404,
+        "message": "resource not found"
+    }), 404
+
+@app.errorhandler(422)
+def unprocessable(error):
+    return jsonify({
+        "success": False,
+        "error": 422,
+        "message": "unprocessable"
+    }), 422
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=env.get('PORT', 3000))

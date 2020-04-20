@@ -12,6 +12,13 @@ def db_init(app):
     migrate = Migrate(app, db)
     return db
 
+def setup_test_db(app, database_path=database_path):
+    app.config["SQLALCHEMY_DATABASE_URI"] = database_path
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    db.app = app
+    db.init_app(app)
+    db.create_all()
+
 class Vegetable(db.Model):
     __tablename__ = 'vegetables'
     id = db.Column(db.Integer, primary_key=True)

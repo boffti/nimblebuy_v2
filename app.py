@@ -3,7 +3,6 @@ import json
 from os import environ as env
 from werkzeug.exceptions import HTTPException
 from flask_cors import CORS, cross_origin
-
 from dotenv import load_dotenv, find_dotenv
 from flask import Flask, jsonify, redirect
 from flask import render_template, session
@@ -41,17 +40,24 @@ babel = Babel(app)
 CORS(app)
 sid = ShortId()
 
+
 @app.after_request
 def after_request(response):
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PATCH,POST,DELETE,OPTIONS')
+    response.headers.add(
+        'Access-Control-Allow-Headers',
+        'Content-Type,Authorization,true')
+    response.headers.add(
+        'Access-Control-Allow-Methods',
+        'GET,PATCH,POST,DELETE,OPTIONS')
     return response
+
 
 @app.errorhandler(Exception)
 def handle_auth_error(ex):
     response = jsonify(message=str(ex))
     response.status_code = (ex.code if isinstance(ex, HTTPException) else 500)
     return response
+
 
 oauth = OAuth(app)
 
@@ -67,13 +73,16 @@ auth0 = oauth.register(
     },
 )
 
+
 def mergeDicts(dict1, dict2):
     if isinstance(dict1, list) and isinstance(dict2, list):
         return dict1 + dict2
     elif isinstance(dict1, dict) and isinstance(dict2, dict):
-        return dict(list(dict1.items())+ list(dict2.items))
+        return dict(list(dict1.items()) + list(dict2.items))
 
-# Basic Page Routes --------------------------------------------------------------------
+# ----------------------------------------------------------------------- #
+# Basic Page Routes
+# ------------------------------------------------------------------------#
 # Home Route
 @app.route('/')
 def home():
@@ -86,9 +95,12 @@ def home():
 def get_category(category):
     try:
         category = Category.query.filter_by(name=category).first()
-        response = [item.format() for item in Vegetable.query.filter_by(category=category).all()]
+        response = [item.format() for item in
+                    Vegetable.query.filter_by(category=category).all()]
         categories = [item.format() for item in Category.query.all()]
-        return render_template('home.html', data=response, categories=categories)
+        return render_template(
+            'home.html',
+            data=response, categories=categories)
 
     except Exception:
         flash('Error fetching category')
@@ -99,19 +111,23 @@ def get_category(category):
 def about_page():
     testimonials = [item.format() for item in Testimonial.query.all()]
     return render_template('about.html', testimonials=testimonials)
-# -----------------------------------------------------------------------------------------
 
-# Auth0 Routes ------------------------------------------------------------------------------
+# ----------------------------------------------------------------------- #
+# Auth0 Routes
+# ------------------------------------------------------------------------#
 # Login Route
 @app.route('/login')
 def login():
-    return auth0.authorize_redirect(redirect_uri=AUTH0_CALLBACK_URL, audience=AUTH0_AUDIENCE)
+    return auth0.authorize_redirect(
+        redirect_uri=AUTH0_CALLBACK_URL, audience=AUTH0_AUDIENCE)
 
 # Logout Route
 @app.route('/logout')
 def logout():
     session.clear()
-    params = {'returnTo': url_for('home', _external=True), 'client_id': AUTH0_CLIENT_ID}
+    params = {'returnTo': url_for(
+        'home', _external=True),
+        'client_id': AUTH0_CLIENT_ID}
     return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
 
 # Login Callback Route
@@ -129,28 +145,31 @@ def callback_handling():
         'user_id': userinfo['sub'],
         'name': userinfo['name'],
         'picture': userinfo['picture'],
-        'email':userinfo['email']
+        'email': userinfo['email']
     }
 
     try:
-        if db.session.query(User.id).filter_by(email=userinfo['email']).scalar() is None:
+        if db.session.query(User.id).filter_by(
+                email=userinfo['email']).scalar() is None:
             user = User(fname=userinfo['name'], email=userinfo['email'])
             user.insert()
     except Exception:
         flash('Something went wrong')
 
     return redirect('/')
-# ----------------------------------------------------------------------------------------
 
-# User Profile Routes---------------------------------------------------------------------
+# ----------------------------------------------------------------------- #
+# User Profile Routes
+# ------------------------------------------------------------------------#
 # GET User Profile Page
 @app.route('/profile')
 def user_profile():
     if 'profile' not in session:
         return redirect(url_for('about_page'))
-    user = User.query.filter_by(email=session.get(constants.PROFILE_KEY)['email']).first()
+    user = User.query.filter_by(
+        email=session.get(constants.PROFILE_KEY)['email']).first()
     apt = [apt.format() for apt in Apartment.query.all()]
-    return render_template('profile.html', apt=apt, user = user.format())
+    return render_template('profile.html', apt=apt, user=user.format())
 
 # PATCH User Profile data
 @app.route('/profile/update', methods=['POST'])
@@ -160,7 +179,8 @@ def update_profile():
     if form_data['apt_name'] == 'Select Apartment Name':
         flash('Please select apartment name to proceed')
     try:
-        user = User.query.filter_by(email=session.get(constants.PROFILE_KEY)['email']).first()
+        user = User.query.filter_by(
+            email=session.get(constants.PROFILE_KEY)['email']).first()
         apt = Apartment.query.filter_by(name=form_data['apt_name']).first()
         user.fname = form_data['name']
         user.phone = form_data['phone']
@@ -174,9 +194,11 @@ def update_profile():
         return redirect(request.referrer)
 
     return redirect(request.referrer)
-# --------------------------------------------------------------------------------------------
 
-# Shopping Cart Routes ---------------------------------------------------------------------
+
+# ----------------------------------------------------------------------- #
+# Shopping Cart Routes
+# ------------------------------------------------------------------------#
 # GET Cart Page
 @app.route('/cart')
 def cart():
@@ -184,17 +206,22 @@ def cart():
         if 'profile' not in session:
             return redirect(url_for('about_page'))
         if 'cart' in session and len(session['cart']) > 0:
-            user = User.query.filter_by(email=session.get(constants.PROFILE_KEY)['email']).first()
-            if user.apartment is None or user.apt is None or user.phone is None:
-                flash("Please update your personal details in Account Settings first. Thank You")
+            user = User.query.filter_by(
+                email=session.get(constants.PROFILE_KEY)['email']).first()
+            if (user.apartment is None or
+                    user.apt is None or user.phone is None):
+                flash(
+                    "Please update your personal" +
+                    "details in Account Settings first. Thank You")
                 return redirect(url_for('user_profile'))
             apt_name = user.apartment.format()
             subtotal = get_cart_total()
             shipping = 10
             subtotal += shipping
-            return render_template('cart.html', subtotal=subtotal,
-                shipping=shipping, user = user.format(), apt_name=apt_name)
-        else: 
+            return render_template(
+                'cart.html', subtotal=subtotal, shipping=shipping,
+                user=user.format(), apt_name=apt_name)
+        else:
             flash('Please add something to the cart first!')
             return redirect(request.referrer)
     except Exception as e:
@@ -211,11 +238,12 @@ def add_to_cart(product_id):
             veg['qty'] = 1
             new_item = [veg]
             if 'cart' in session:
-                if not any(item['id'] == product_id for item in session['cart']):
+                if (not any(item['id'] == product_id
+                            for item in session['cart'])):
                     session['cart'] = mergeDicts(session['cart'], new_item)
                 else:
                     flash(veg['name'].capitalize() + ' already in cart!')
-                return redirect(request.referrer)        
+                return redirect(request.referrer)
             else:
                 session['cart'] = new_item
                 return redirect(request.referrer)
@@ -230,14 +258,15 @@ def add_to_cart(product_id):
 # DELETE Cart Item
 @app.route('/cart/delete/<int:product_id>', methods=['POST'])
 def delete_item_in_cart(product_id):
-    if 'user' not in session and 'cart' not in session and len(session['cart'] <=0):
+    if ('user' not in session and 'cart' not in session
+            and len(session['cart'] <= 0)):
         return redirect(url_for('home'))
     try:
         session.modified = True
         arr = session['cart']
         arr[:] = [d for d in arr if d.get('id') != product_id]
         session['cart'] = arr
-        if len(session['cart']) == 0 :
+        if len(session['cart']) == 0:
             flash('All items removed from cart')
             return redirect(url_for('home'))
         return redirect(url_for('cart'))
@@ -265,15 +294,18 @@ def update_cart(product_id):
             print(f'Error ==> {e}')
             return redirect(url_for('cart'))
 
+
 # Calculate total order cost
 def get_cart_total():
     subtotal = 0
     for product in session['cart']:
         subtotal += float(product['price']) * float(product['qty'])
     return subtotal
-# --------------------------------------------------------------------------
 
-# Order Creation Routes -----------------------------------------------------------
+
+# ----------------------------------------------------------------------- #
+# Order Creation Routes
+# ------------------------------------------------------------------------#
 # POST Create the order
 @app.route('/create-order', methods=['POST'])
 def create_order():
@@ -281,13 +313,19 @@ def create_order():
         shipping = 10
         subtotal = get_cart_total() + shipping
         session['subtotal'] = subtotal
-        customer = User.query.filter_by(email=session.get(constants.PROFILE_KEY)['email']).first()
-        order = Order(customer=customer, order_number=sid.generate(), order_date=str(maya.now()), order_total=subtotal)
+        customer = User.query.filter_by(
+            email=session.get(constants.PROFILE_KEY)['email']).first()
+        order = Order(
+            customer=customer, order_number=sid.generate(),
+            order_date=str(maya.now()), order_total=subtotal)
         order.insert()
         session['order'] = order.format()
         for product in session['cart']:
             ordered_item = Vegetable.query.get(int(product['id']))
-            order_details = OrderDetails(ordered_item=ordered_item, order=order, price=product['price'], qty=product['qty'], total=subtotal)
+            order_details = OrderDetails(
+                ordered_item=ordered_item, order=order,
+                price=product['price'], qty=product['qty'],
+                total=subtotal)
             order_details.insert()
         session.pop('cart', None)
         return redirect(url_for('order_confirm'))
@@ -301,41 +339,56 @@ def create_order():
 @app.route('/confirm')
 def order_confirm():
     return render_template('confirmation.html')
-# -------------------------------------------------------------------------------
 
-# Enquiries
+
 @app.route('/enquire', methods=['POST'])
 def submit_enquiry():
     data = request.form.to_dict()
     try:
         if 'enquiry' not in data:
-            enquiry = Enquiry(name=data['name'], phone=data['phone'], locality=data['locality'])
+            enquiry = Enquiry(
+                name=data['name'], phone=data['phone'],
+                locality=data['locality'])
         else:
-            enquiry = Enquiry(name=data['name'], phone=data['phone'], locality=data['locality'], enquiry=data['enquiry'])
+            enquiry = Enquiry(
+                name=data['name'], phone=data['phone'],
+                locality=data['locality'], enquiry=data['enquiry'])
         enquiry.insert()
-        flash('Your details were submitted. We will get back to you very shortly.')
+        flash(
+            'Your details were submitted.' +
+            'We will get back to you very shortly.')
         return redirect(request.referrer)
     except Exception:
         flash('Your enquiry could not be submitted. Please try again later')
         return redirect(request.referrer)
 
-# ADMIN Routes -------------------------------------------------------------------------------
-# GET Admin page
-@app.route('/admin_page')
+# ----------------------------------------------------------------------- #
+# Admin Routes
+# ------------------------------------------------------------------------#
 @requires_auth('get:admin_dashboard')
 def get_admin_page(jwt):
-    return render_template('admin.html', orders=get_orders(), stock=get_stock(), apt=get_apt(), enquiry=get_enquiries())
+    return render_template(
+        'admin.html', orders=get_orders(),
+        stock=get_stock(), apt=get_apt(),
+        enquiry=get_enquiries())
+
 
 @app.route('/admin_page/filter/<int:apt_id>')
 @requires_auth('get:admin_dashboard')
 def get_admin_page_with_filter(jwt, apt_id):
-    return render_template('admin.html', orders=get_orders(apt_id), stock=get_stock(), apt=get_apt(), enquiry=get_enquiries())
+    return render_template(
+        'admin.html', orders=get_orders(apt_id),
+        stock=get_stock(), apt=get_apt(),
+        enquiry=get_enquiries())
+
 
 def get_enquiries():
     return [item.format() for item in Enquiry.query.all()]
 
+
 def get_apt():
     return [item.format() for item in Apartment.query.all()]
+
 
 def get_orders_by_user(loc_id=None):
     response = []
@@ -349,19 +402,24 @@ def get_orders_by_user(loc_id=None):
             orders = user.orders
             if len(orders) > 0:
                 order_details = [order.order_details for order in orders]
-                items_ordered = [{**(detail.format()), **(Vegetable.query.get(detail.product_id).format())} for detail in order_details[0]]
+                items_ordered = [{**(detail.format()), **(Vegetable.query.get(
+                    detail.product_id).format())}
+                    for detail in order_details[0]]
                 response.append({
-                    'customer': {**(user.format()), **(user.apartment.format())},
+                    'customer': {**(user.format()), **(
+                        user.apartment.format())},
                     'order': [order.format() for order in user.orders],
                     'order_details': items_ordered,
                     'order_total': items_ordered[0].get('total', 0)
                 })
-            else: continue
+            else:
+                continue
         return response
 
     except Exception as e:
         print(f'error ==> {e}')
         return None
+
 
 def get_orders(loc_id=None):
     response = []
@@ -369,9 +427,12 @@ def get_orders(loc_id=None):
     for order in orders:
         user = order.customer
         order_details = order.order_details
-        items_ordered = [{**(detail.format()), **(Vegetable.query.get(detail.product_id).format())} for detail in order_details]
+        items_ordered = [{**(detail.format()), **(
+            Vegetable.query.get(detail.product_id).format())}
+            for detail in order_details]
         response.append({
-                    'customer': {**(user.format()), **(user.apartment.format())},
+                    'customer': {**(user.format()),
+                        **(user.apartment.format())},
                     'order': order.format(),
                     'order_details': items_ordered,
                 })
@@ -380,13 +441,15 @@ def get_orders(loc_id=None):
 
 def get_stock():
     try:
-        inventory = [{**(item.format()), **({ 'stock' : 0 })} for item in Vegetable.query.all()]
+        inventory = [{**(item.format()), **(
+            {'stock': 0})} for item in Vegetable.query.all()]
         order_details = OrderDetails.query.all()
         items_ordered = [detail.format() for detail in order_details]
         for product in inventory:
             for item in items_ordered:
                 if product['id'] == item['product_id']:
-                    product['stock'] = product.get('stock') + float(item['qty'])
+                    product['stock'] = product.get(
+                        'stock') + float(item['qty'])
         return inventory
     except Exception as e:
         print(f'Error ==> {e}')
@@ -399,9 +462,10 @@ def get_session():
         'jwt': session.get('jwt_payload'),
         'profile': session.get(constants.PROFILE_KEY),
         'cart': session.get('cart'),
-        'token':session.get('token'),
+        'token': session.get('token'),
         'permissions': session.get('permissions')
     })
+
 
 # Init DB Data
 def import_db():
@@ -414,18 +478,22 @@ def import_db():
         cat = Category(id=item['id'], name=item['name'])
         cat.insert()
     for item in data.testimonials:
-        test = Testimonial(id=item['id'], name=item['name'], testimonial=item['testimonial'])
+        test = Testimonial(
+            id=item['id'], name=item['name'],
+            testimonial=item['testimonial'])
         test.insert()
     for item in data.products:
-        veg = Vegetable(category_id=item['category_id'], image=item['image'],
-                        k_name=item['k_name'], name=item['name'],
-                        onSale=bool(item['onSale']), price=item['price'],
-                        unit=item['unit'])
+        veg = Vegetable(
+            category_id=item['category_id'], image=item['image'],
+            k_name=item['k_name'], name=item['name'],
+            onSale=bool(item['onSale']), price=item['price'],
+            unit=item['unit'])
         veg.insert()
 
 # ----------------------------------------------------------------------- #
-# Test Routes
+# Error Handlers
 # ------------------------------------------------------------------------#
+
 
 @app.errorhandler(400)
 def bad_request(error):
@@ -435,6 +503,7 @@ def bad_request(error):
         "message": "bad request"
     }), 400
 
+
 @app.errorhandler(404)
 def not_found(error):
     return jsonify({
@@ -443,6 +512,7 @@ def not_found(error):
         "message": "resource not found"
     }), 404
 
+
 @app.errorhandler(422)
 def unprocessable(error):
     return jsonify({
@@ -450,6 +520,7 @@ def unprocessable(error):
         "error": 422,
         "message": "unprocessable"
     }), 422
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=env.get('PORT', 3000))

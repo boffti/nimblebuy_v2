@@ -71,6 +71,7 @@ def get_token_auth_header():
     token = parts[1]
     return token
 
+
 def check_permissions(permission, payload):
     if 'permissions' not in payload:
         raise AuthError({
@@ -83,6 +84,7 @@ def check_permissions(permission, payload):
             'description': 'Permission not found.'
         }, 403)
     return True
+
 
 def verify_decode_jwt(token):
     jsonurl = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
@@ -139,19 +141,6 @@ def verify_decode_jwt(token):
             }, 400)
 
 
-'''
-TODO implement @requires_auth(permission) decorator method
-    @INPUTS
-        permission: string permission (i.e. 'post:drink')
-
-    it should use the get_token_auth_header method to get the token
-    it should use the verify_decode_jwt method to decode the jwt
-    it should use the check_permissions method validate claims
-    and check the requested permission
-    return the decorator which passes the decoded payload
-    to the decorated method
-'''
-
 def store_permissions():
     token = session.get('token')
     try:
@@ -197,8 +186,8 @@ def requires_scope(required_scope):
     token = session.get(constants.JWT_PAYLOAD)
     unverified_claims = jwt.get_unverified_claims(token)
     if unverified_claims.get("scope"):
-            token_scopes = unverified_claims["scope"].split()
-            for token_scope in token_scopes:
-                if token_scope == required_scope:
-                    return True
+        token_scopes = unverified_claims["scope"].split()
+        for token_scope in token_scopes:
+            if token_scope == required_scope:
+                return True
     return False

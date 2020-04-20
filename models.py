@@ -5,6 +5,8 @@ from flask_user import UserMixin
 database_path = 'sqlite:///nimblebuy.db'
 
 db = SQLAlchemy()
+
+
 # Init for main app
 def db_init(app):
     app.config.from_object('config')
@@ -12,6 +14,7 @@ def db_init(app):
     db.init_app(app)
     migrate = Migrate(app, db)
     return db
+
 
 # Init for Test Suite
 def setup_db(app, database_path):
@@ -22,12 +25,14 @@ def setup_db(app, database_path):
     db.init_app(app)
     db.create_all()
 
+
 def db_drop_and_create_all():
     '''drops the database tables and starts fresh
     can be used to initialize a clean database
     '''
     db.drop_all()
     db.create_all()
+
 
 class Vegetable(db.Model):
     __tablename__ = 'vegetables'
@@ -39,7 +44,6 @@ class Vegetable(db.Model):
     unit = db.Column(db.String)
     onSale = db.Column(db.Boolean, default=True)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
-
 
     order_details = db.relationship('OrderDetails', backref='ordered_item')
 
@@ -58,27 +62,27 @@ class Vegetable(db.Model):
         return {
             'id': self.id,
             'name': self.name,
-            'k_name':self.k_name,
+            'k_name': self.k_name,
             'price': self.price,
             'image': self.image,
             'unit': self.unit,
             'onSale': self.onSale,
             'category': Category.query.get(self.category_id).format()['name']
-            
         }
-    
+
     def format2(self):
         return({
-            self.id : {
-            'name': self.name,
-            'price': self.price,
-            'image': self.image,
-            'onSale': self.onSale
-        }
+            self.id: {
+                'name': self.name,
+                'price': self.price,
+                'image': self.image,
+                'onSale': self.onSale
+            }
         })
 
     def __repr__(self):
         return f'<Vegetable {self.id} {self.name}>'
+
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -108,7 +112,7 @@ class User(db.Model, UserMixin):
     def format(self):
         return {
             'id': self.id,
-            'email':self.email,
+            'email': self.email,
             'phone': self.phone,
             'fname': self.fname,
             'apt': self.apt,
@@ -118,17 +122,21 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return f'<User {self.id} {self.fname}>'
 
+
 class Role(db.Model):
     __tablename__ = 'roles'
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(50), unique=True)
 
-    # Define the UserRoles association table
+
 class UserRoles(db.Model):
     __tablename__ = 'user_roles'
     id = db.Column(db.Integer(), primary_key=True)
-    user_id = db.Column(db.Integer(), db.ForeignKey('users.id', ondelete='CASCADE'))
-    role_id = db.Column(db.Integer(), db.ForeignKey('roles.id', ondelete='CASCADE'))
+    user_id = db.Column(db.Integer(),
+                        db.ForeignKey('users.id', ondelete='CASCADE'))
+    role_id = db.Column(db.Integer(),
+                        db.ForeignKey('roles.id', ondelete='CASCADE'))
+
 
 class Apartment(db.Model):
     __tablename__ = 'apartment'
@@ -146,10 +154,11 @@ class Apartment(db.Model):
             'apt_name': self.name
         }
 
+
 class Stock(db.Model):
     __tablename__ = 'stock'
     id = db.Column(db.Integer, primary_key=True)
-    in_stock = db.Column(db.Boolean, default = True)
+    in_stock = db.Column(db.Boolean, default=True)
     stock = db.Column(db.Float)
 
     def insert(self):
@@ -159,10 +168,12 @@ class Stock(db.Model):
     def __repr__(self):
         return f'<Stock {self.id} {self.stock}>'
 
+
 class Order(db.Model):
     __tablename__ = 'orders'
     id = db.Column(db.Integer, primary_key=True)
-    customer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    customer_id = db.Column(db.Integer,
+                            db.ForeignKey('users.id'), nullable=False)
     order_number = db.Column(db.String)
     order_date = db.Column(db.String)
     order_total = db.Column(db.String)
@@ -186,6 +197,7 @@ class Order(db.Model):
 
     def __repr__(self):
         return f'<Order {self.id} {self.customer_id}>'
+
 
 class OrderDetails(db.Model):
     __tablename__ = 'order_details'
@@ -213,6 +225,7 @@ class OrderDetails(db.Model):
     def __repr__(self):
         return f'<OrderDetails {self.id} {self.price}>'
 
+
 class Testimonial(db.Model):
     __tablename__ = 'testimonials'
     id = db.Column(db.Integer, primary_key=True)
@@ -227,7 +240,8 @@ class Testimonial(db.Model):
         return({
             'name': self.name,
             'testimonial': self.testimonial,
-        })   
+        })
+
 
 class Category(db.Model):
     __tablename__ = 'categories'
@@ -243,7 +257,8 @@ class Category(db.Model):
     def format(self):
         return({
             'name': self.name,
-        })   
+        })
+
 
 class Enquiry(db.Model):
     __tablename__ = 'enquiries'
@@ -263,4 +278,4 @@ class Enquiry(db.Model):
             'phone': self.phone,
             'locality': self.locality,
             'enquiry': self.enquiry
-        })   
+        })

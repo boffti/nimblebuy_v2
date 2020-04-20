@@ -1,6 +1,6 @@
 # NimbleBuy
 
-![Build Status](http://img.shields.io/travis/badges/badgerbadgerbadger.svg?style=flat-square)
+![Build Status](https://img.shields.io/badge/build-passing-green)
 ![Python Verion](https://img.shields.io/badge/python-3.7-blue)
 
 This project/venture was started by my family and I during the COVID-19 lockdown period. We have identified some Grocery vendors who are going out of business and are connecting them to consumers in apartments and other communities.
@@ -8,7 +8,7 @@ We currently fulfill about 500+ orders per day in Bangalore, India and have abou
 As this project was done during my pursual of the Full Stack Developer Nanodegree on Udacity, I decided to submit the same as the capstone. The project is entirey constructed from FLASK with Auth0 serving as the Login Manager.
 The website can be found [here](https://www.nimblebuy.in/about).
 
-<img src="screen_2.png" width="500"/> <img src="screen_1.png" width="500"/> 
+<img src="screen_2.png" width="425"/> <img src="screen_1.png" width="425"/> 
 
 ## Getting Started
 
@@ -145,8 +145,6 @@ To host your app follow these steps -
 ## Author
 
 #### Aneesh Melkot
- [![AneeshMelkot](https://media-exp1.licdn.com/dms/image/C5603AQHsiim3D67V_A/profile-displayphoto-shrink_200_200/0?e=1586995200&v=beta&t=INRP5iwYUJ8RuCuQK5E0VRmGySKlVMga1fgS0jszh6Q)](http://github.com/boffti)s
+ ![AneeshMelkot](https://i.ibb.co/SmKJ8VH/7490577.jpg)
 
 This sample demonstrates how to add authentication to a Python web app using Auth0.
-
-

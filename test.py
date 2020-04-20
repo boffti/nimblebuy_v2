@@ -19,6 +19,7 @@ class NimbleTestCase(unittest.TestCase):
     def setUp(self):
         """Define test variables and initialize app."""
         self.app = app
+        app.config['SECRET_KEY'] = 'sekrit!'
         self.client = self.app.test_client
         self.database_name = "nimblebuy_test"
         self.database_path = "sqlite:///{}".format(self.database_name)

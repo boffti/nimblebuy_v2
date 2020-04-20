@@ -170,7 +170,8 @@ class Order(db.Model):
             'customer_id': self.customer_id,
             'order_number': self.order_number,
             'order_date': self.order_date,
-            'customer_loc': self.customer_loc
+            'customer_loc': self.customer_loc,
+            'order_total': self.order_total
         }
 
     def __repr__(self):

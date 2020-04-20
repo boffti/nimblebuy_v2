@@ -337,7 +337,7 @@ def get_enquiries():
 def get_apt():
     return [item.format() for item in Apartment.query.all()]
 
-def get_orders(loc_id=None):
+def get_orders_by_user(loc_id=None):
     response = []
     try:
         users = None
@@ -363,13 +363,19 @@ def get_orders(loc_id=None):
         print(f'error ==> {e}')
         return None
 
-def get_orders_2(loc_id=None):
+def get_orders(loc_id=None):
     response = []
     orders = Order.query.all()
     for order in orders:
         user = order.customer
         order_details = order.order_details
         items_ordered = [{**(detail.format()), **(Vegetable.query.get(detail.product_id).format())} for detail in order_details]
+        response.append({
+                    'customer': {**(user.format()), **(user.apartment.format())},
+                    'order': order.format(),
+                    'order_details': items_ordered,
+                })
+    return response
 
 
 def get_stock():

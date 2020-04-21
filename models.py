@@ -185,6 +185,10 @@ class Order(db.Model):
         db.session.add(self)
         db.session.commit()
 
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
     def format(self):
         return {
             'id': self.id,
@@ -220,6 +224,10 @@ class OrderDetails(db.Model):
 
     def insert(self):
         db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
         db.session.commit()
 
     def __repr__(self):

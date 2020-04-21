@@ -216,3 +216,7 @@ body {
 #clients img {
     transition: all 0.4s ease-in-out
 }
+
+.btn-round{
+    border-radius: 15px;
+}

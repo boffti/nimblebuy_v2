@@ -46,63 +46,8 @@
 </style>
 <div class="container">
     <div class="row">
-        <div class="col-lg-6 p-5 bg-white rounded shadow-sm mb-5">
-            <div class="bg-light rounded-pill mb-4 px-4 py-3 text-uppercase font-weight-bold">Purchase List</div>
-
-            <table class="table table-bordered" style="border-collapse:collapse;">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>ಹೆಸರು</th>
-                        <th>Stock</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in stock %}
-                    {% if item.stock > 0 %}
-                    <tr>
-                        <td>{{ item.name }}</td>
-                        <td>{{ item.k_name }}</td>
-                        <td>{{ item.stock }} {{ item.unit }}</td>
-                    </tr>
-                    {% endif %}
-                    {% endfor %}
-                </tbody>
-            </table>
-
-
-        </div>
-        <div class="col-lg-6 p-5 bg-white rounded shadow-sm mb-5">
-            <div class="bg-light rounded-pill mb-4 px-4 py-3 text-uppercase font-weight-bold">Enquiries</div>
-
-            <table class="table table-bordered" style="border-collapse:collapse;">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Phone</th>
-                        <th>Locality</th>
-                        <th>Enquiry</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in enquiry %}
-                    <tr>
-                        <td>{{ item.name }}</td>
-                        <td>{{ item.phone }}</td>
-                        <td>{{ item.locality }}</td>
-                        <td>{{ item.enquiry }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-
-
-        </div>
-    </div>
-
-    <div class="row">
         <div class="col-lg-12 p-5 bg-white rounded shadow-sm mb-5">
-            <div class="bg-light rounded-pill mb-4 px-4 py-3 text-uppercase font-weight-bold d-flex align-items-center">Orders
+            <div class="bg-light rounded-pill mb-4 px-4 py-2 text-uppercase font-weight-bold d-flex align-items-center">Orders
                 <div class="dropdown">
                     <button class="btn btn-link text-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
@@ -115,6 +60,10 @@
                         {% endfor %}
                     </div>
                 </div>
+                <p class="mx-auto my-auto">Earnings = ₹{{total_earnings}}</p>
+                <form action="/delete-order/all" method="post">
+                    <button type="submit" class="ml-auto btn-round btn btn-sm btn-outline-danger">Delete All</button>
+                </form>
             </div>
             <table class="table table-bordered" style="border-collapse:collapse;">
                 <thead class="sticky-top">
@@ -127,13 +76,14 @@
                         <th>Apt Num</th>
                         <th>Phone</th>
                         <th>Order total</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
 
                     {% for order in orders %}
                     <tr colspan="8" data-toggle="collapse" data-target="#demo1" class="accordion-toggle">
-                        <td>{{loop.index}}</td>
+                        <td>{{order.order.id}}</td>
                         <td>{{ order.order.order_number }}</td>
                         <td>{{ order.order.order_date }}</td>
                         <td>{{ order.customer.fname }}</td>
@@ -141,9 +91,15 @@
                         <td>{{ order.customer.apt }}</td>
                         <td>{{ order.customer.phone }}</td>
                         <td>₹{{ order.order.order_total }}</td>
+                        <td>
+                            <form action="/delete-order/{{ order.order.id }}" method="post">
+                                <button type="submit" class="btn btn-link text-dark"><i
+                                        class="fa fa-trash"></i></button>
+                            </form>
+                        </td>
                     </tr>
                     <tr class="p">
-                        <td colspan="8" class="hiddenRow">
+                        <td colspan="9" class="hiddenRow">
                             <div class="accordian-body  p-3" id="demo1">
                                 {% if order.order %}
                                 <div class="row">

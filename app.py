@@ -19,6 +19,7 @@ from auth import AuthError, requires_auth, store_permissions
 from shortid import ShortId
 import maya
 import data
+from functools import reduce
 import constants
 
 ENV_FILE = find_dotenv()
@@ -376,7 +377,7 @@ def get_admin_page(jwt):
     return render_template(
         'admin.html', orders=get_orders(),
         stock=get_stock(), apt=get_apt(),
-        enquiry=get_enquiries())
+        enquiry=get_enquiries(), total_earnings=get_total_earnings())
 
 
 @app.route('/admin_page/filter/<int:apt_id>')
@@ -387,6 +388,39 @@ def get_admin_page_with_filter(jwt, apt_id):
         stock=get_stock(), apt=get_apt(),
         enquiry=get_enquiries())
 
+@app.route('/stock')
+@requires_auth('get:admin_dashboard')
+def show_stock(jwt):
+    return render_template(
+        'stock.html', stock=get_stock())
+
+@app.route('/enquiries')
+@requires_auth('get:admin_dashboard')
+def show_enquiries(jwt):
+    return render_template(
+        'enquiries.html', enquiry=get_enquiries())
+
+@app.route('/delete-order/<param>', methods=['POST'])
+@requires_auth('get:admin_dashboard')
+def delete_order(jwt, param):
+    try:
+        if param == 'all':
+            order_details = [item.delete() for item in OrderDetails.query.all()]
+            orders = [order.delete() for order in Order.query.all()]
+            flash("All orders deleted")
+            return redirect(request.referrer)
+        else:
+            order = Order.query.get(int(param))
+            order_details = order.order_details
+            order.delete()
+            temp = [item.delete() for item in order_details]
+            flash("Order deleted")
+            return redirect(request.referrer)
+    except Exception as e:
+        print(f'Error ==> {e}')
+        flash('Something went wrong')
+        return redirect(request.referrer)
+
 
 def get_enquiries():
     return [item.format() for item in Enquiry.query.all()]
@@ -395,6 +429,13 @@ def get_enquiries():
 def get_apt():
     return [item.format() for item in Apartment.query.all()]
 
+def get_total_earnings():
+    orders = Order.query.all()
+    total_earnings = 0
+    if len(orders) > 0 :
+        total_earnings = reduce(lambda acc, x: acc + x, [float(order.order_total) for order in orders])
+    return total_earnings
+    
 
 def get_orders(loc_id=None):
     response = []

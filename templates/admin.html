@@ -61,7 +61,7 @@
                     </div>
                 </div>
                 <p class="mx-auto my-auto">Earnings = ₹{{total_earnings}}</p>
-                <form action="/delete-order/all" method="post">
+                <form class="my-auto" action="/delete-order/all" method="post">
                     <button type="submit" class="ml-auto btn-round btn btn-sm btn-outline-danger">Delete All</button>
                 </form>
             </div>
@@ -92,7 +92,7 @@
                         <td>{{ order.customer.phone }}</td>
                         <td>₹{{ order.order.order_total }}</td>
                         <td>
-                            <form action="/delete-order/{{ order.order.id }}" method="post">
+                            <form class="mb-0" action="/delete-order/{{ order.order.id }}" method="post">
                                 <button type="submit" class="btn btn-link text-dark"><i
                                         class="fa fa-trash"></i></button>
                             </form>

@@ -386,7 +386,7 @@ def get_admin_page_with_filter(jwt, apt_id):
     return render_template(
         'admin.html', orders=get_orders(apt_id),
         stock=get_stock(), apt=get_apt(),
-        enquiry=get_enquiries())
+        enquiry=get_enquiries(), total_earnings=get_total_earnings(apt_id))
 
 @app.route('/stock')
 @requires_auth('get:admin_dashboard')
@@ -429,8 +429,16 @@ def get_enquiries():
 def get_apt():
     return [item.format() for item in Apartment.query.all()]
 
-def get_total_earnings():
-    orders = Order.query.all()
+def get_total_earnings(id=None):
+    orders = []
+    if id:
+        for order in Order.query.all():
+            if order.customer.apt_id != id:
+                continue
+            else:
+                orders.append(order)
+    else:
+        orders = Order.query.all() 
     total_earnings = 0
     if len(orders) > 0 :
         total_earnings = reduce(lambda acc, x: acc + x, [float(order.order_total) for order in orders])

@@ -121,3 +121,98 @@ body {
 .carousel-indicators li.active {
     background: #28a745;
 }
+
+.mbr-section {
+    position: relative;
+    padding-top: 120px;
+    padding-bottom: 120px;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: cover; }
+
+.mbr-section-nopadding {
+    padding-top: 0;
+    padding-bottom: 0; }
+
+.mbr-map {
+    height: 15rem;
+    position: relative; }
+    .mbr-map iframe {
+        height: 100%;
+        width: 100%; }
+    .mbr-map [data-state-details] {
+        color: #6b6763;
+        font-family: Montserrat;
+        height: 1.5em;
+        margin-top: -0.75em;
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+        position: absolute;
+        text-align: center;
+        top: 50%;
+        width: 100%; }
+    .mbr-map[data-state] {
+        background: #e9e5dc; }
+    .mbr-map[data-state="loading"] [data-state-details] {
+        display: none; }
+    .mbr-map[data-state="loading"]::after {
+        content: "";
+        -webkit-animation: btnCircleLoading .6s infinite linear;
+        animation: btnCircleLoading .6s infinite linear;
+        border-radius: 50%;
+        border: 6px rgba(255, 255, 255, 0.35) solid;
+        border-top-color: #fff;
+        height: 40px;
+        left: 50%;
+        margin-left: -20px;
+        margin-top: -20px;
+        position: absolute;
+        top: 50%;
+        width: 40px; }
+
+.section-header h3 {
+    font-size: 36px;
+    color: #283d50;
+    text-align: center;
+    font-weight: 500;
+    position: relative
+}
+
+.section-header p {
+    text-align: center;
+    margin: auto;
+    font-size: 15px;
+    padding-bottom: 60px;
+    color: #556877;
+    width: 50%
+}
+
+#clients {
+    padding: 60px 0
+}
+
+#clients .clients-wrap {
+    margin-bottom: 30px
+}
+
+#clients .client-logo {
+    padding: 64px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    overflow: hidden;
+    height: 160px
+}
+
+#clients img {
+    transition: all 0.4s ease-in-out
+}

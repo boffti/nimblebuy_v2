@@ -3,7 +3,8 @@ import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
-from models import Order, User, Vegetable, OrderDetails, Category, setup_db, db_drop_and_create_all
+from models import Order, User, Vegetable, OrderDetails
+from models import Category, setup_db, db_drop_and_create_all
 from flask_migrate import Migrate
 from flask_user import UserMixin
 import random

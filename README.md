@@ -8,7 +8,7 @@ We currently fulfill about 500+ orders per day in Bangalore, India and have abou
 As this project was done during my pursual of the Full Stack Developer Nanodegree on Udacity, I decided to submit the same as the capstone. The project is entirey constructed from FLASK with Auth0 serving as the Login Manager.
 The website can be found [here](https://www.nimblebuy.in/about).
 
-<img src="screen_2.png" width="425"/> <img src="screen_1.png" width="425"/> 
+<img src="https://i.ibb.co/86nqG5n/screen-2.png" width="425"/> <img src="https://i.ibb.co/VCNb9CR/screen-1.png" width="425"/> 
 
 ## Getting Started
 
@@ -146,5 +146,3 @@ To host your app follow these steps -
 
 #### Aneesh Melkot
  ![AneeshMelkot](https://i.ibb.co/SmKJ8VH/7490577.jpg)
-
-This sample demonstrates how to add authentication to a Python web app using Auth0.

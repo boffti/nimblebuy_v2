@@ -240,9 +240,12 @@ def add_to_cart(product_id):
             if 'cart' in session:
                 if (not any(item['id'] == product_id
                             for item in session['cart'])):
-                    session['cart'] = mergeDicts(session['cart'], new_item)
+                    session['cart'] = mergeDicts(
+                        session['cart'], new_item)
                 else:
-                    flash(veg['name'].capitalize() + ' already in cart!')
+                    flash(
+                        veg['name'].capitalize() +
+                        ' already in cart!')
                 return redirect(request.referrer)
             else:
                 session['cart'] = new_item
@@ -359,12 +362,15 @@ def submit_enquiry():
             'We will get back to you very shortly.')
         return redirect(request.referrer)
     except Exception:
-        flash('Your enquiry could not be submitted. Please try again later')
+        flash(
+            'Your enquiry could not be submitted.' +
+            'Please try again later')
         return redirect(request.referrer)
 
 # ----------------------------------------------------------------------- #
 # Admin Routes
-# ------------------------------------------------------------------------#
+# ------------------------------------------------------------------------#4
+@app.route('/admin_page')
 @requires_auth('get:admin_dashboard')
 def get_admin_page(jwt):
     return render_template(
@@ -390,42 +396,18 @@ def get_apt():
     return [item.format() for item in Apartment.query.all()]
 
 
-def get_orders_by_user(loc_id=None):
-    response = []
-    try:
-        users = None
-        if loc_id:
-            users = User.query.filter_by(apt_id=loc_id).all()
-        else:
-            users = User.query.all()
-        for user in users:
-            orders = user.orders
-            if len(orders) > 0:
-                order_details = [order.order_details for order in orders]
-                items_ordered = [{**(detail.format()), **(Vegetable.query.get(
-                    detail.product_id).format())}
-                    for detail in order_details[0]]
-                response.append({
-                    'customer': {**(user.format()), **(
-                        user.apartment.format())},
-                    'order': [order.format() for order in user.orders],
-                    'order_details': items_ordered,
-                    'order_total': items_ordered[0].get('total', 0)
-                })
-            else:
-                continue
-        return response
-
-    except Exception as e:
-        print(f'error ==> {e}')
-        return None
-
-
 def get_orders(loc_id=None):
     response = []
     orders = Order.query.all()
     for order in orders:
-        user = order.customer
+        user = None
+        if loc_id:
+            if order.customer.apt_id != loc_id:
+                continue
+            else:
+                user = order.customer
+        else:
+            user = order.customer
         order_details = order.order_details
         items_ordered = [{**(detail.format()), **(
             Vegetable.query.get(detail.product_id).format())}

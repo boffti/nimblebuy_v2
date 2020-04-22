@@ -61,9 +61,7 @@
                     </div>
                 </div>
                 <p class="mx-auto my-auto">Earnings = ₹{{total_earnings}}</p>
-                <form class="my-auto" action="/delete-order/all" method="post">
-                    <button type="submit" class="ml-auto btn-round btn btn-sm btn-outline-danger">Delete All</button>
-                </form>
+                    <button type="submit" class="ml-auto btn-round btn btn-sm btn-outline-danger" data-toggle="modal" data-target="#deleteordersmodal">Delete All</button>
             </div>
             <table class="table table-bordered" style="border-collapse:collapse;">
                 <thead class="sticky-top">
@@ -122,6 +120,29 @@
 
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteordersmodal" tabindex="-1" role="dialog" aria-labelledby="enquirymodallabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/delete-order/all" method="post">
+                <div class="modal-body">
+                    Are you sure you want to delete all the orders?
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

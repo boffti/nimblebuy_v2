@@ -13,6 +13,8 @@ from models import db_init, Vegetable, User, Order
 from models import OrderDetails, Apartment, Category
 from models import Stock, Testimonial, Role, UserRoles
 from models import Enquiry
+from flask_admin import Admin
+from admin import AdminView
 from flask_migrate import Migrate
 from flask_babelex import Babel
 from auth import AuthError, requires_auth, store_permissions
@@ -41,6 +43,12 @@ babel = Babel(app)
 CORS(app)
 sid = ShortId()
 
+# set optional bootswatch theme
+app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
+
+admin = Admin(app, name='nimblebuy', template_mode='bootstrap3', index_view=AdminView(Vegetable, db.session, url='/admin', endpoint='admin'))
+admin.add_view(AdminView(Category, db.session))
+admin.add_view(AdminView(Apartment, db.session))
 
 @app.after_request
 def after_request(response):

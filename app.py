@@ -395,7 +395,42 @@ def submit_enquiry():
 
 # ----------------------------------------------------------------------- #
 # Admin Routes
-# ------------------------------------------------------------------------#4
+# ------------------------------------------------------------------------#
+@app.route('/edit/<int:product_id>')
+@requires_auth('get:admin_dashboard')
+def get_product_details(jwt, product_id):
+    product = Vegetable.query.get(product_id)
+    category = [cat.format() for cat in Category.query.all()]
+    return render_template('/admin/edit_product.html', product=product.format(), category=category)
+
+# PATCH User Profile data
+@app.route('/product/update/<int:product_id>', methods=['POST'])
+@requires_auth('get:admin_dashboard')
+def update_product(jwt, product_id):
+    form_data = request.form.to_dict()
+    print(form_data)
+    if form_data['cat_name'] == 'Select Category Name':
+        flash('Please select category name to proceed')
+    try:
+        product = Vegetable.query.get(product_id)
+        cat = Category.query.filter_by(name=form_data['cat_name']).first()
+        product.name = form_data['name']
+        product.k_name = form_data['k_name']
+        product.price = float(form_data['price'])
+        product.category = cat
+        product.image = form_data['image']
+        product.unit = form_data['unit']
+        product.onSale = bool(form_data['onSale'])
+        product.update()
+        flash('Product updated successfully')
+    except Exception as e:
+        print(f'Error ==> {e}')
+        flash('Something went wrong')
+        return redirect(request.referrer)
+
+    return redirect(url_for('home'))
+
+
 @app.route('/admin_page')
 @requires_auth('get:admin_dashboard')
 def get_admin_page(jwt):

@@ -1,6 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_user import UserMixin
 
 database_path = 'sqlite:///nimblebuy.db'
 
@@ -84,7 +83,7 @@ class Vegetable(db.Model):
         return f'<Vegetable {self.id} {self.name}>'
 
 
-class User(db.Model, UserMixin):
+class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String)

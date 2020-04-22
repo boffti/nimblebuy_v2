@@ -14,7 +14,7 @@
 </ul>
 {% endblock %}
 {% block content %}
-<div class="pb-5 mt-2">
+<div class="pb-3 mt-2">
     <div class="container">
 
         <div class="row py-5 p-4 bg-white rounded shadow-sm">
@@ -22,11 +22,12 @@
                 <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold"> #{{ session['order']['order_number'] }}  Order Placed</div>
                 <div class="p-4">
                     <ul class="list-unstyled mb-4">
-                        <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Order
+                        <li class="d-flex align-items-center justify-content-around py-3 border-bottom"><strong class="text-muted">Order
                                 Subtotal </strong><h3>₹{{ session['subtotal'] }}</h3></li>
                     </ul>
-                    <p class="text-muted">Please pay the displayed amount through any of the below methods and please mention your location and door number in the payment description.  💵📲</p>
-                    <p>Thanks for your order! 😄</p>
+                    <p class="text-muted">Please pay the displayed amount through any of the below methods 💵📲</p>
+                    <p class="text-muted">Please mention your location and door number in the payment description during payment.  </p>
+                    <p class="text-muted">Thanks for your order! 😄</p>
                 </div>
                 <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Payment Modes
                 </div>
@@ -49,4 +50,10 @@
 
     </div>
 </div>
+
+<footer class="footer text-muted">
+    <div class="container text-center">
+        <p class="pb-2 mb-0">Made with <i class="fas fa-heart text-danger"></i> by <a class="text-muted" href="https://www.linkedin.com/in/aneeshmelkot/" target="_blank">Aneesh Melkot</a></p>
+    </div>
+</footer>
 {% endblock %}

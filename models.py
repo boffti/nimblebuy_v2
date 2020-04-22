@@ -263,7 +263,8 @@ class Category(db.Model):
 
     def format(self):
         return({
-            'name': self.name,
+            'id': self.id,
+            'name': self.name
         })
 
 

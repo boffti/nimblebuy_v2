@@ -63,13 +63,21 @@
                             <div class="card-subtitle mt-0 mb-0">
                                 per {{ item.unit }}
                             </div>
+                            {% if 'get:admin_dashboard' in session['permissions'] %}
+                            <form action="/edit/{{ item.id }}">
+                                <button type="submit" href="javascript:void(0)" class="btn btn-sm btn-outline-primary mt-3"><i
+                                        class="fas fa-edit"></i></button>
+                            </form>
+                            {% endif %}
                         </div>
+                        
                         <div class="ml-auto">
                             
                             <form action="/cart/{{ item.id }}" method='post'>
                                 <button type="submit" href="javascript:void(0)" class="btn btn-success"><i
                                         class="fas fa-cart-plus"></i> Add</button>
                             </form>
+                            
                         </div>
 
                     </div>

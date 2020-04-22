@@ -99,6 +99,19 @@ def home():
     categories = [item.format() for item in Category.query.all()]
     return render_template('home.html', data=response, categories=categories)
 
+@app.route('/product/search/', methods=['GET','POST'])
+def search_product():
+    try:
+        search_term = request.form.get('search_term', '')
+        result = Vegetable.query.filter(Vegetable.name.ilike(f'%{search_term}%'))
+        categories = [item.format() for item in Category.query.all()]
+        response=[item.format() for item in result]
+        return render_template('home.html', data=response, categories=categories)
+    except Exception as e:
+        print(f'Error ==> {e}')
+        flash('Error fetching search result')
+        return redirect(request.referrer)
+
 # Home Route Categorized
 @app.route('/category/<string:category>')
 def get_category(category):
@@ -251,6 +264,8 @@ def add_to_cart(product_id):
                             for item in session['cart'])):
                     session['cart'] = mergeDicts(
                         session['cart'], new_item)
+                    flash(veg['name'].capitalize() +
+                        ' added to cart')
                 else:
                     flash(
                         veg['name'].capitalize() +
@@ -258,6 +273,8 @@ def add_to_cart(product_id):
                 return redirect(request.referrer)
             else:
                 session['cart'] = new_item
+                flash(veg['name'].capitalize() +
+                    ' added to cart')
                 return redirect(request.referrer)
         except Exception as e:
             print(f'Error ==> {e}')

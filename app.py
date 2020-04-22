@@ -375,7 +375,7 @@ def submit_enquiry():
 @requires_auth('get:admin_dashboard')
 def get_admin_page(jwt):
     return render_template(
-        'admin.html', orders=get_orders(),
+        '/admin/admin.html', orders=get_orders(),
         stock=get_stock(), apt=get_apt(),
         enquiry=get_enquiries(), total_earnings=get_total_earnings())
 
@@ -384,7 +384,7 @@ def get_admin_page(jwt):
 @requires_auth('get:admin_dashboard')
 def get_admin_page_with_filter(jwt, apt_id):
     return render_template(
-        'admin.html', orders=get_orders(apt_id),
+        '/admin/admin.html', orders=get_orders(apt_id),
         stock=get_stock(), apt=get_apt(),
         enquiry=get_enquiries(), total_earnings=get_total_earnings(apt_id))
 
@@ -392,13 +392,13 @@ def get_admin_page_with_filter(jwt, apt_id):
 @requires_auth('get:admin_dashboard')
 def show_stock(jwt):
     return render_template(
-        'stock.html', stock=get_stock())
+        '/admin/stock.html', stock=get_stock())
 
 @app.route('/enquiries')
 @requires_auth('get:admin_dashboard')
 def show_enquiries(jwt):
     return render_template(
-        'enquiries.html', enquiry=get_enquiries())
+        '/admin/enquiries.html', enquiry=get_enquiries())
 
 @app.route('/delete-order/<param>', methods=['POST'])
 @requires_auth('get:admin_dashboard')

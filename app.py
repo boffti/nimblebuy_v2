@@ -350,7 +350,7 @@ def create_order():
             email=session.get(constants.PROFILE_KEY)['email']).first()
         order = Order(
             customer=customer, order_number=sid.generate(),
-            order_date=str(maya.now()), order_total=subtotal)
+            order_date=str(maya.now().datetime(to_timezone='Asia/Calcutta')), order_total=subtotal)
         order.insert()
         session['order'] = order.format()
         for product in session['cart']:

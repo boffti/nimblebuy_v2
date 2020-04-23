@@ -49,6 +49,10 @@ app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 admin = Admin(app, name='nimblebuy', template_mode='bootstrap3', index_view=AdminView(Vegetable, db.session, url='/admin', endpoint='admin'))
 admin.add_view(AdminView(Category, db.session))
 admin.add_view(AdminView(Apartment, db.session))
+admin.add_view(AdminView(Testimonial, db.session))
+admin.add_view(AdminView(Enquiry, db.session))
+admin.add_view(AdminView(Order, db.session))
+admin.add_view(AdminView(OrderDetails, db.session))
 
 @app.after_request
 def after_request(response):

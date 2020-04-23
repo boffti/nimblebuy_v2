@@ -40,7 +40,7 @@
     <div class="row mt-2">
 
         {% for item in data %}
-        {% if item.onSale %}
+
         <div class="col-lg-3 col-md-4 col-sm-6 col-6">
             <div class="card">
                 <div class="card-body">
@@ -72,12 +72,14 @@
                         </div>
                         
                         <div class="ml-auto">
-                            
+                            {% if item.onSale %}
                             <form action="/cart/{{ item.id }}" method='post'>
                                 <button type="submit" href="javascript:void(0)" class="btn btn-success"><i
                                         class="fas fa-cart-plus"></i> Add</button>
                             </form>
-                            
+                            {% else %}
+                            <span class="badge badge-secondary">Out of Stock</span>
+                            {% endif %}
                         </div>
 
                     </div>
@@ -85,7 +87,6 @@
                 </div>
             </div>
         </div>
-        {% endif %}
         {% endfor %}
     </div>
 </div>

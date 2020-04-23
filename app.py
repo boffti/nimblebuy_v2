@@ -420,7 +420,10 @@ def update_product(jwt, product_id):
         product.category = cat
         product.image = form_data['image']
         product.unit = form_data['unit']
-        product.onSale = bool(form_data['onSale'])
+        if 'onSale' in form_data:
+            product.onSale = bool(form_data['onSale'])
+        else:
+            product.onSale = False
         product.update()
         flash('Product updated successfully')
     except Exception as e:

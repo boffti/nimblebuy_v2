@@ -178,7 +178,7 @@ def callback_handling():
     except Exception:
         flash('Something went wrong')
 
-    return redirect('/')
+    return redirect(url_for('home'))
 
 # ----------------------------------------------------------------------- #
 # User Profile Routes

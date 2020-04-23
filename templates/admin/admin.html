@@ -81,7 +81,7 @@
 
                     {% for order in orders %}
                     <tr colspan="8" data-toggle="collapse" data-target="#demo1" class="accordion-toggle">
-                        <td>{{order.order.id}}</td>
+                        <td>{{loop.index}}</td>
                         <td>{{ order.order.order_number }}</td>
                         <td>{{ order.order.order_date }}</td>
                         <td>{{ order.customer.fname }}</td>

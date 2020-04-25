@@ -1,0 +1,101 @@
+{% extends "template.html" %}
+{% block title %}
+<title>My Orders</title>
+{% endblock %}
+
+{% block header %}
+<ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('home') }}">Shop</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('about_page') }}">About</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% set count = 5 %}
+{% block content %}
+<style>
+    .table tr {
+        cursor: pointer;
+    }
+
+    .table {
+        background-color: #fff !important;
+    }
+
+    .hedding h1 {
+        color: #fff;
+        font-size: 25px;
+    }
+
+    .main-section {
+        margin-top: 5px;
+    }
+
+    .hiddenRow {
+        padding: 0 4px !important;
+        background-color: #eeeeee;
+        font-size: 13px;
+    }
+
+    .accordian-body span {
+        color: #a2a2a2 !important;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 p-5 bg-white rounded shadow-sm mb-5">
+            <div class="bg-light rounded-pill mb-4 px-4 py-2 text-uppercase font-weight-bold d-flex align-items-center">My Orders
+            </div>
+            <table class="table table-bordered" style="border-collapse:collapse;">
+                <thead class="sticky-top">
+                    <tr>
+                        <th>No.</th>
+                        <th>Order No</th>
+                        <th>Order Date</th>
+                        <th>Order total</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for order in orders %}
+                    <tr colspan="4" data-toggle="collapse" data-target="#demo1" class="accordion-toggle">
+                        <td>{{loop.index}}</td>
+                        <td>{{ order.order.order_number }}</td>
+                        <td>{{ order.order.order_date | datetime}}</td>
+                        <td>₹{{ order.order.order_total }}</td>
+                        <!-- <td>
+                            <form class="mb-0" action="/delete-order/{{ order.order.id }}" method="post">
+                                <button type="submit" class="btn btn-link text-dark"><i
+                                        class="fa fa-trash"></i></button>
+                            </form>
+                        </td> -->
+                    </tr>
+                    <tr class="p">
+                        <td colspan="9" class="hiddenRow">
+                            <div class="accordian-body  p-3" id="demo1">
+                                {% if order.order %}
+                                <div class="row">
+                                    {% for item in order.order_details %}
+                                    {% set subtotal = item.qty|float * item.price|float %}
+                                    <div class="col-sm-2">
+                                        <p><span>{{ item.qty }} {{ item.unit }}</span> : {{ item.name }} : <span>₹{{ subtotal }}</span></p>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                <p><span>Nothing Ordered</span></p>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

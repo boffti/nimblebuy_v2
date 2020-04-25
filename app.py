@@ -23,6 +23,7 @@ import maya
 import data
 from functools import reduce
 import constants
+import datetime
 
 ENV_FILE = find_dotenv()
 if ENV_FILE:
@@ -92,6 +93,14 @@ def mergeDicts(dict1, dict2):
         return dict1 + dict2
     elif isinstance(dict1, dict) and isinstance(dict2, dict):
         return dict(list(dict1.items()) + list(dict2.items))
+
+@app.template_filter('datetime')
+def format_datetime(value, format='medium'):
+    if format == 'full':
+        format="EEEE, d. MMMM y 'at' HH:mm"
+    elif format == 'medium':
+        format="EE dd.MM.y HH:mm"
+    return value.split('.')[0]
 
 # ----------------------------------------------------------------------- #
 # Basic Page Routes
@@ -220,6 +229,31 @@ def update_profile():
         return redirect(request.referrer)
 
     return redirect(request.referrer)
+
+@app.route('/orders')
+def show_user_orders():
+    if 'profile' not in session:
+        return redirect(url_for('about_page'))
+    try:
+        user = User.query.filter_by(
+            email=session.get(constants.PROFILE_KEY)['email']).first()
+        # orders = [order.format() for order in user.orders]
+        response = []
+        for order in user.orders:
+            order_details = order.order_details
+            items_ordered = [{**(detail.format()), **(
+                Vegetable.query.get(detail.product_id).format())}
+                for detail in order_details]
+            response.append({
+                        'order': order.format(),
+                        'order_details': items_ordered,
+                    })
+        return render_template('orders.html', orders=response)
+
+    except Exception as e:
+        print(f'Error ==> {e}')
+        return redirect(request.referrer)
+    return render_template('orders.html', orders=response)
 
 
 # ----------------------------------------------------------------------- #

@@ -3,3 +3,5 @@
 .gitignore
 .git
 README.md
+.github/
+__pycache__/

@@ -1,12 +1,10 @@
-FROM python:3
+FROM python:3.10.7-slim-buster
 
-WORKDIR /home/app
+WORKDIR /app
 
-#If we add the requirements and install dependencies first, docker can use cache if requirements don't change
-ADD requirements.txt /home/app
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt
 
-ADD . /home/app
-CMD python server.py
+COPY . .
 
-EXPOSE 3000
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
